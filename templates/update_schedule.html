@@ -1,0 +1,15 @@
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{{ form.media }}
+
+
+<form action="{% url 'update_schedule' %}" method="POST">
+	{% csrf_token %}
+	{% bootstrap_form form %}
+	{% for error in form.non_field_errors %}
+		<p class="help is-danger">{{ error }}</p>
+	{% endfor %}
+	<button type="submit" class="btn btn-outline-dark btn-sm" value="Submit"></button>
+</form>

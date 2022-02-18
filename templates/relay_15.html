@@ -1,0 +1,25 @@
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{{ form.media }}
+
+{% if gpio_15_state == 1 %}
+<form action="{% url 'relay_on_off' %}" method="POST" style="padding-top: 5px; width: 100%;">
+	{% csrf_token %}
+	<input type="hidden" name="15" value="15">
+	<input type="hidden" name="next" value="{{ request.path }}">
+	<div class="btn-group btn-group-sm btn-block" role="group" aria-label="Basic example">
+		<button type="submit" class="arc_buttons" name="status" value="False">OFF</button>
+	</div>
+</form>
+{% else %}
+<form action="{% url 'relay_on_off' %}" method="POST" style="padding-top: 5px; width: 100%;">
+	{% csrf_token %}
+	<input type="hidden" name="15" value="15">
+	<input type="hidden" name="next" value="{{ request.path }}">
+	<div class="btn-group btn-group-sm btn-block" role="group" aria-label="Basic example">
+		<button type="submit" class="arc_buttons" name="status" value="True">ON </button>
+	</div>
+</form>
+{% endif %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load schedule_display %}
+{% load static %}
+{% block content %}
+<link href="{% static 'css/schedule.css' %}" rel="stylesheet">
+<div class="grid-container">
+	<main class="main">
+		{% overview_cards %}
+		<div id="climate_card_id">
+			<div class="card">
+				<div class="main_card__icon">CLIMATE</div>
+				<div id="chart_content" class="card-body" style="padding-top: 0px;">
+					{% climate_tag %}
+				</div>
+			</div>
+			<div class="card">
+				<div class="main_card__icon">CLIMATE PARAMETERS</div>
+				{% set_climate_form %}
+			</div>
+			<div class="card">
+				<div class="main_card__icon">CLIMATE LOG</div>
+				{% log_data %}
+			</div>
+		</div>
+	</main>
+</div>
+
+{% endblock %}

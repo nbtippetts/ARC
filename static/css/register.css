@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap');
+
+body{
+  	background : #CCC5B9;
+	background : rgba(204, 197, 185, 1);
+}
+
+.register_wrapper{
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.register_form{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 600px;
+	padding: 35px 50px;
+	background-color: #EDECEB;
+    background-color: rgba(237, 236, 235, 1);
+    border-radius: 31px;
+    -moz-border-radius: 31px;
+    -webkit-border-radius: 31px;
+}
+
+.register_form .title .register_line{
+	border-bottom : Solid;
+	border-color : #252422;
+	border-color : rgba(37, 36, 34, 0.5);
+	border-width : 1px;
+	padding: 5px;
+}
+
+.register_form .title{
+	text-align: center;
+	margin-bottom: 20px;
+	font-weight: 700;
+	font-size: 24px;
+}
+
+.register_form .input_wrap{
+	margin-bottom: 20px;
+	width: 100%;
+	position: relative;
+	align-self: center;
+}
+
+.register_form .input_wrap:last-child{
+	margin-bottom: 0;
+	padding-top: 20px;
+	display: flex;
+    justify-content: center;
+}
+
+.register_form .input_wrap label{
+	display: block;
+	margin-bottom: 5px;
+}
+
+.register_form .input_wrap input{
+	padding: 20px;
+	width: 100%;
+	font-size: 16px;
+	border-radius: 3px;
+	background: #EDECEB;
+	background: rgba(237, 236, 235, 1);
+	border-style: Solid;
+	border-color: #403D39;
+	border-color: rgba(64, 61, 57, 1);
+	border-width: 1px;
+	height: 46px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+.register_form .input_wrap .input{
+	background: #f5f4f4;
+	padding-right: 35px;
+}
+
+
+.register_form .input_wrap .input:focus{
+	border-color: #1dbf73;
+}
+
+.register_form .input_wrap .input_field{
+	position: relative;
+}
+
+
+.register_form .input_wrap .error_msg{
+	font-size: 15px;
+	margin-bottom: 5px;
+	color: #f74040;
+	display: none;
+}
+
+.register-footer
+{
+	align-self: center;
+	padding-top: 40px;
+	font-family : Helvetica;
+	font-size : 14px;
+	color : #403D39;
+	color : rgb(64, 61, 57);
+	filter: alpha(opacity=46) progid:DXImageTransform.Microsoft.Alpha(opacity=46);
+}
+.register-footer .ml-2 {
+	font-family : Helvetica;
+	font-weight: bold;
+	font-size : 16px;
+	color : #252422;
+	color: rgba(37, 36, 34, 1);
+	opacity : 0.46;
+	filter: alpha(opacity=46) progid:DXImageTransform.Microsoft.Alpha(opacity=46);
+}

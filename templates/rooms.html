@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load schedule_display %}
+{% load static %}
+{% block content %}
+<link href="{% static 'css/schedule.css' %}" rel="stylesheet">
+<div class="grid-container">
+	<main class="main">
+		<form action="{% url 'put_room' %}" method="POST" class="form-inline">
+			{% csrf_token %}
+			<div class="form-group mx-sm-3 mb-2">
+				<label for="room" class="sr-only">Room</label>
+				<input type="text" class="form-control" name='name' id="room" placeholder="Name">
+			</div>
+			<button type="submit" class="arc_buttons mb-2">Create Room</button>
+		</form>
+		{% for ip in get_ip %}
+			<form action="{% url 'put_ip' ip.id %}" method="POST" class="form-inline">
+				{% csrf_token %}
+				<div class="form-group">
+					<label for="rooms">Room</label>
+					<select id="rooms" name="room_id">
+						{% for room in get_all_rooms %}
+						<option value="{{ room.id }}">{{ room.id }}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="form-group mx-sm-3 mb-2">
+					<label for="ip" class="sr-only">IP</label>
+					<input type="text" readonly name='ip' class="form-control" value="{{ ip.ip }}">
+				</div>
+				<button type="submit" class="arc_buttons mb-2">Add Realy</button>
+			</form>
+		{% empty %}
+		{% endfor %}
+		<div class="main-cards">
+				{% for room in get_all_rooms %}
+					<div class="card">
+						<h5 class="card-header"><a href="{% url 'get_room' room.id %}">{{ room.name }}</a></h5>
+						<div class="card-body">
+							<table class="table table-hover table-bordered">
+								<thead class="thead-dark">
+									<tr>
+										<th scope="col">Name</th>
+										<th scope="col">IP</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for room_ip in room.ip %}
+									<tr>
+										<th scope="row">{{ room_ip.name }}</th>
+										<td>{{ room_ip.ip }}</td>
+									</tr>
+									<td>
+										<form action="{% url 'delete_ip' room.id room_ip.id %}" method="POST">
+											{% csrf_token %}
+											<a class="tooltips" data-toggle="tooltip" data-placement="top" title="Delete">
+												<button type="submit" onclick="return confirm('Are you sure to delete this course ?');" style="border: 0; background: none;">
+													<i class="fa fa-trash-o" aria-hidden="true"></i>
+												</button>
+											</a>
+										</form>
+									</td>
+									{% endfor %}
+								</tbody>
+							</table>
+							<table class="table table-hover table-bordered">
+								<thead class="thead-dark">
+									<tr>
+										<th scope="col">NAME</th>
+										<th scope="col">START TIME</th>
+										<th scope="col">END TIME</th>
+										<th scope="col">HOW OFTEN</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for room_climate_schedule in room.climate_schedule %}
+									<tr>
+										<th scope="row">{{ room_climate_schedule.name }}</th>
+										<td>{{ room_climate_schedule.start_time }}</td>
+										<td>{{ room_climate_schedule.end_time }}</td>
+										<td>{{ room_climate_schedule.how_often }}</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+							<table class="table table-hover table-bordered">
+								<thead class="thead-dark">
+									<tr>
+										<th scope="col">NAME</th>
+										<th scope="col">CO2</th>
+										<th scope="col">CO2 Relay</th>
+										<th scope="col">Humidity</th>
+										<th scope="col">Humidity Relay</th>
+										<th scope="col">Temperature</th>
+										<th scope="col">Temperature Relay</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for room_climate in room.climate %}
+									<tr>
+										<th scope="row">{{ room_climate.name }}</th>
+										<td>{{ room_climate.co2_parameters }}</td>
+										<td>{{ room_climate.co2_relay_ip }}</td>
+										<td>{{ room_climate.humidity_parameters }}</td>
+										<td>{{ room_climate.humidity_relay_ip }}</td>
+										<td>{{ room_climate.temperature_parameters }}</td>
+										<td>{{ room_climate.exhaust_relay_ip }}</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+							<form action="{% url 'delete_room' room.id %}" method="POST">
+								{% csrf_token %}
+								<button type="submit" class="arc_buttons">Delete</button>
+							</form>
+						</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</main>
+</div>
+
+{% endblock content %}

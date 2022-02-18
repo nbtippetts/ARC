@@ -1,0 +1,77 @@
+version: '3'
+
+services:
+  web:
+    restart: always
+    # container_name: arc_web
+    image: index.docker.io/noahtippetts/arc:latest
+    command: bash -c "while !</dev/tcp/db/5432; do sleep 1; done; python /arc/manage.py collectstatic --noinput && python /arc/manage.py makemigrations && python /arc/manage.py migrate --noinput && gunicorn --timeout 300 arc.wsgi:application --bind 0.0.0.0:8000"
+    devices:
+      - "/dev/gpiomem:/dev/gpiomem"
+      - "/dev/mem:/dev/mem"
+    privileged: true
+    expose:
+      - 8000
+    volumes:
+      - .:/arc
+      - static_volume:/arc/static  # <-- bind the static volume
+      - media_volume:/arc/media  # <-- bind the media volume
+    networks:  # <-- here
+      - web_network
+      - nginx_network
+      - db_network  # <-- connect to the bridge
+    # labels:
+    #   - "com.centurylinklabs.watchtower.enable=true"
+    depends_on:
+      - db
+
+  # watchtower:
+  #   image: containrrr/watchtower
+  #   restart: always
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   environment:
+  #     - WATCHTOWER_CLEANUP=true
+  #     - WATCHTOWER_LABEL_ENABLE=true
+  #     - WATCHTOWER_INCLUDE_RESTARTING=true
+  #   labels:
+  #     - "com.centurylinklabs.watchtower.enable=true"
+
+  db:
+    restart: always
+    image: postgres
+    environment:
+      - POSTGRES_USER=pi
+      - POSTGRES_PASSWORD=rnautomations
+      - POSTGRES_DB=arc_db
+    networks:  # <-- connect to the bridge
+      - db_network
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata:/var/lib/postgresql/data
+
+  nginx:
+    restart: always
+    build: ./nginx
+    volumes:
+      - .:/arc
+      - static_volume:/arc/static  # <-- bind the static volume
+      - media_volume:/arc/media  # <-- bind the media volume
+    ports:
+      - 1914:80
+    depends_on:
+      - web
+    networks:  # <-- here
+      - nginx_network
+networks:  # <-- and here
+  web_network:
+    driver: bridge
+  nginx_network:
+    driver: bridge
+  db_network:  # <-- add the bridge
+    driver: bridge
+
+volumes:
+    pgdata:
+    static_volume:
+    media_volume:

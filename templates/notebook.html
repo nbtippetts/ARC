@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{{ form.media }}
+
+{% block content %}
+<link href="{% static 'css/notebook.css' %}" rel="stylesheet">
+<div class="timeline-container">
+	<div class="timeline">
+		<div class="outer">
+		<div class="card">
+			<form action="{% url 'publish_note' %}" method="POST">
+				{% csrf_token %}
+				{{ form|crispy }}
+				<button type="submit" class="arc_buttons" value="Submit">Publish</button>
+			</form>
+		</div>
+		</div>
+	</div>
+	<div class="timeline">
+		<div class="outer">
+		{% for note in notes %}
+		<div class="main-overview">
+			<div class="overviewcard">
+				<div class="overviewcard__icon">{{ note.title }}</div>
+				<div class="card-subtitle mb-2 text-muted" style="float: right;">{{ note.publish_date }}</div>
+				<div class="overviewcard__info">
+					{{ note.body }}
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+		</div>
+		</div>
+</div>
+{% endblock content%}
