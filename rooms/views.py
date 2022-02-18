@@ -6,6 +6,13 @@ import requests
 def get_all_rooms(request):
 	url = "http://127.0.0.1:5000/rooms"
 	rooms_response = requests.get(url)
+	if rooms_response.status_code == 409:
+		context = {
+			'get_all_rooms': [],
+			'room_id':1,
+			'get_ip': []
+		}
+		return render(request, 'rooms.html',context)
 	url = f"http://127.0.0.1:5000/all_ips"
 	ip_response = requests.get(url)
 	if ip_response.status_code == 200:
@@ -35,8 +42,8 @@ def put_room(request):
 	if request.method == 'POST':
 		url = f'http://127.0.0.1:5000/rooms'
 		response = requests.get(url)
-		room = response.json()
-		if room:
+		if response.status_code==200:
+			room = response.json()
 			print(room[-1]['id'])
 			room_id=room[-1]['id']+1
 		else:
