@@ -6,6 +6,8 @@
 <div class="grid-container">
 	<main class="main">
 		<div class="main-cards">
+			<h1>Climate Reads</h1>
+			<div id="messages"></div>
 					<div class="card">
 						<div class="table-title">
 							<div class="row">
@@ -386,5 +388,20 @@
 			}
 		});
 	});
+		let url = `ws://${window.location.host}/ws/socket-server/`
+
+		const chatSocket = new WebSocket(url)
+
+		chatSocket.onmessage = function (e) {
+			let data = JSON.parse(e.data)
+			console.log('Data:', data)
+
+			if (data.type === 'chat') {
+				let messages = document.getElementById('messages')
+
+				messages.innerText = `CO2: ${data.message.co2} Humidity: ${data.message.humidity} Temperature: ${data.message.temperature}`
+
+			}
+		}
 </script>
 {% endblock content %}

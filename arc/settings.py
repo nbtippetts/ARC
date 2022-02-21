@@ -27,12 +27,13 @@ SECRET_KEY = 'if&(y*+3iya!ix#)xh=ycq5y&8i36@exr&kkl_og2_7$(##u(q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 # ALLOWED_HOSTS = ["*"]
-ALLOWED_HOSTS = ['*', '172.21.0.2', '172.21.0.1','174.52.250.10', 'arc.dev', 'arc', '192.168.1.18', '172.18.0.1', 'web', '0.0.0.0', 'localhost', '127.0.0.1', '10.20.1.1', '[::1]']
+ALLOWED_HOSTS = []
 
 
 # Application definition
 INSTALLED_APPS = [
-    'rooms.apps.RoomsConfig',
+    'channels',
+    # 'rooms.apps.RoomsConfig',
     'users.apps.UsersConfig',
     'climate.apps.ClimateConfig',
     'schedule.apps.ScheduleConfig',
@@ -46,7 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap5',
     'django_forms_bootstrap',
-    # 'jquery'
+    'rooms'
 ]
 
 MIDDLEWARE = [
@@ -82,22 +83,38 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'arc.wsgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
+ASGI_APPLICATION = 'arc.asgi.application'
+# ASGI_APPLICATION = 'arc.routing.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'arc_db',
+#         'USER': 'pi',
+#         'PASSWORD': 'rnautomations',
+#         # 'HOST': 'db',
+#         'HOST': 'localhost',
+#         'PORT': 5432,
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'arc_db',
-        'USER': 'pi',
-        'PASSWORD': 'rnautomations',
-        # 'HOST': 'db',
-        'HOST': 'localhost',
-        'PORT': 5432,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
