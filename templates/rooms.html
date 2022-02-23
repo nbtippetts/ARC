@@ -20,13 +20,13 @@
 					<label for="rooms">Room</label>
 					<select id="rooms" name="room_id">
 						{% for room in get_all_rooms %}
-						<option value="{{ room.id }}">{{ room.id }}</option>
+						<option value="{{ room.id }}">{{ room.name }}</option>
 						{% endfor %}
 					</select>
 				</div>
 				<div class="form-group mx-sm-3 mb-2">
 					<label for="ip" class="sr-only">IP</label>
-					<input type="text" readonly name='ip' class="form-control" value="{{ ip.ip }}">
+					<input type="text" readonly name='ip' class="form-control" value="{{ ip.name }}">
 				</div>
 				<button type="submit" class="arc_buttons mb-2">Add Realy</button>
 			</form>
