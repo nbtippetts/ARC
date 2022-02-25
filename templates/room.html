@@ -3,6 +3,7 @@
 {% load static %}
 {% block content %}
 <link href="{% static 'css/schedule.css' %}" rel="stylesheet">
+<script src="{% static 'js/climate_data.js' %}"></script>
 <div class="grid-container">
 	<main class="main">
 		<div class="main-cards">
@@ -70,7 +71,7 @@
 						<div class="table-title">
 							<div class="row">
 								<div class="col-sm-6">
-									<h2>Manage <b>Schedules</b></h2>
+									<h2>Manage <b>Climate</b></h2>
 								</div>
 								<div class="col-sm-6">
 									<a class="fa fa-coffee" data-bs-toggle="modal" data-bs-target="#addClimateModel"></a>
@@ -78,6 +79,7 @@
 							</div>
 						</div>
 						<div class="card-body">
+						<div class="card-title" id="climate-data-{{ get_room.id }}"></div>
 						<table class="table table-hover table-bordered">
 							<thead class="thead-dark">
 								<tr>
@@ -144,44 +146,23 @@
 				<form action="{% url 'put_climate' get_room.id %}" method="POST">
 				{% csrf_token %}
 				<div class="form-group">
-					<label for="ips">CO2 Relay</label>
-					<select id="ips" name="co2_ip">
-						{% for ip in valid_climate_ips %}
-						<option value="{{ ip.ip }}">{{ ip.name }}</option>
-						{% endfor %}
-					</select>
-				</div>
-				<div class="form-group">
-					<label for="ips">Humidity Relay</label>
-					<select id="ips" name="humidity_ip">
-						{% for ip in valid_climate_ips %}
-						<option value="{{ ip.ip }}">{{ ip.name }}</option>
-						{% endfor %}
-					</select>
-				</div>
-				<div class="form-group">
-					<label for="ips">Exhaust Relay</label>
-					<select id="ips" name="exhaust_ip">
-						{% for ip in valid_climate_ips %}
-						<option value="{{ ip.ip }}">{{ ip.name }}</option>
-						{% endfor %}
-					</select>
-				</div>
-				<div class="form-group">
 					<label>NAME</label>
 					<input type="text" name='name' class="form-control" placeholder="Name">
 				</div>
 				<div class="form-group">
 					<label>CO2 Parameters</label>
 					<input type="text" name='co2_parameters' class="form-control" placeholder="CO2">
+					<input type="text" hidden name='co2_ip' class="form-control" value="{{ valid_climate_ips.CO2.ip }}">
 				</div>
 				<div class="form-group">
 					<label>Humidity Parameters</label>
 					<input type="text" name='humidity_parameters' class="form-control" placeholder="Humidity">
+					<input type="text" hidden name='humidity_ip' class="form-control" value="{{ valid_climate_ips.Humidity.ip }}">
 				</div>
 				<div class="form-group">
 					<label>Temperature Parameters</label>
 					<input type="text" name='temperature_parameters' class="form-control" placeholder="Temperature">
+					<input type="text" hidden name='exhaust_ip' class="form-control" value="{{ valid_climate_ips.Exhaust.ip }}">
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -204,44 +185,23 @@
 				<form action="" method="POST">
 					{% csrf_token %}
 					<div class="form-group">
-						<label for="ips">CO2 Relay</label>
-						<select id="ips" name="co2_ip">
-							{% for ip in valid_climate_ips %}
-							<option value="{{ ip.ip }}">{{ ip.name }}</option>
-							{% endfor %}
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="ips">Humidity Relay</label>
-						<select id="ips" name="humidity_ip">
-							{% for ip in valid_climate_ips %}
-							<option value="{{ ip.ip }}">{{ ip.name }}</option>
-							{% endfor %}
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="ips">Exhaust Relay</label>
-						<select id="ips" name="exhaust_ip">
-							{% for ip in valid_climate_ips %}
-							<option value="{{ ip.ip }}">{{ ip.name }}</option>
-							{% endfor %}
-						</select>
-					</div>
-					<div class="form-group">
 						<label>NAME</label>
 						<input type="text" name='name' class="form-control" placeholder="Name">
 					</div>
 					<div class="form-group">
 						<label>CO2 Parameters</label>
 						<input type="text" name='co2_parameters' class="form-control" placeholder="CO2">
+						<input type="text" hidden name='co2_ip' class="form-control" value="{{ valid_climate_ips.CO2.ip }}">
 					</div>
 					<div class="form-group">
 						<label>Humidity Parameters</label>
 						<input type="text" name='humidity_parameters' class="form-control" placeholder="Humidity">
+						<input type="text" hidden name='humidity_ip' class="form-control" value="{{ valid_climate_ips.Humidity.ip }}">
 					</div>
 					<div class="form-group">
 						<label>Temperature Parameters</label>
 						<input type="text" name='temperature_parameters' class="form-control" placeholder="Temperature">
+						<input type="text" hidden name='exhaust_ip' class="form-control" value="{{ valid_climate_ips.Exhaust.ip }}">
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -265,14 +225,10 @@
 					<div class="form-group">
 						<label for="ips">Relay</label>
 						<select id="ips" name="ip">
-							{% for ip in get_room.ip %}
-								<option value="{{ ip.id }}">{{ ip.name }}</option>
+							{% for ip in valid_climate_schedule_ips %}
+								<option value="{{ ip.id }}|{{ ip.name }}">{{ ip.name }}</option>
 							{% endfor %}
 						</select>
-					</div>
-					<div class="form-group">
-						<label>NAME</label>
-						<input type="text" name='name' class="form-control" placeholder="Name">
 					</div>
 					<div class="form-group">
 						<label>START TIME</label>
@@ -305,10 +261,6 @@
 			<div class="modal-body">
 				<form action="" method="POST">
 					{% csrf_token %}
-					<div class="form-group">
-						<label>NAME</label>
-						<input type="text" name='name' class="form-control" placeholder="Name">
-					</div>
 					<div class="form-group">
 						<label>START TIME</label>
 						<input type="datetime-local" name='start_time' class="form-control" placeholder="Start Time">
@@ -388,20 +340,5 @@
 			}
 		});
 	});
-		let url = `ws://${window.location.host}/ws/socket-server/`
-
-		const chatSocket = new WebSocket(url)
-
-		chatSocket.onmessage = function (e) {
-			let data = JSON.parse(e.data)
-			console.log('Data:', data)
-
-			if (data.type === 'chat') {
-				let messages = document.getElementById('messages')
-
-				messages.innerText = `CO2: ${data.message.co2} Humidity: ${data.message.humidity} Temperature: ${data.message.temperature}`
-
-			}
-		}
 </script>
 {% endblock content %}

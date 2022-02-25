@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect
 from datetime import datetime, date
 from django.contrib.auth.decorators import login_required
@@ -31,11 +32,21 @@ def get_all_rooms(request):
 def get_room(request,room_id):
 	url = f"http://127.0.0.1:5000/room/{room_id}"
 	response = requests.get(url)
-	url = f"http://127.0.0.1:5000/room/{room_id}/climate_ips"
-	climate_response = requests.get(url)
+	res = response.json()
+	climate_ips={}
+	climate_check=['Exhaust','Humidity','CO2']
+	climate_schedule_ips=[]
+	climate_schedule_check=['Light','Water']
+	for ip in res['ip']:
+		if ip['name'] in climate_check:
+			climate_ips[ip['name']]=ip
+		if ip['name'] in climate_schedule_check:
+			climate_schedule_ips.append(ip)
+
 	context = {
 		'get_room': response.json(),
-		'valid_climate_ips': climate_response.json(),
+		'valid_climate_ips': climate_ips,
+		'valid_climate_schedule_ips': climate_schedule_ips
 	}
 	return render(request, 'room.html',context)
 def put_room(request):
@@ -119,11 +130,12 @@ def put_schedule(request, room_id):
 		else:
 			relayschedule_id=1
 		url = f'http://127.0.0.1:5000/room/{room_id}/relayschedule/{relayschedule_id}'
-		name = request.POST['name']
+		ip_data = request.POST['ip'].split('|')
+		ip_id = ip_data[0]
+		name = ip_data[1]
 		start = request.POST['start_time']
 		end = request.POST['end_time']
 		how_often = request.POST['how_often']
-		ip_id = request.POST['ip']
 		payload={'name': name,'start_time': start.replace('T', ' '), 'end_time': end.replace('T', ' '), 'how_often': how_often, 'ip_id':ip_id}
 		response = requests.put(url, data=payload)
 		print(response.json())
@@ -201,9 +213,6 @@ def patch_climate(request, room_id, climate_id):
 		}
 		response = requests.patch(url, data=payload)
 		print(response.status_code)
-		# context = {
-		# 	'put_schedule': response.text
-		# }
 		return redirect(f'/rooms/get_room/{room_id}')
 
 def delete_climate(request,room_id, climate_id):
