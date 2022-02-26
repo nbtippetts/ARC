@@ -34,7 +34,6 @@ pyOpenSSL==22.0.0
 pytz==2021.3
 requests==2.27.1
 service-identity==21.1.0
-simpleduration==0.1.0
 six==1.16.0
 soupsieve==2.3.1
 sqlparse==0.4.2
