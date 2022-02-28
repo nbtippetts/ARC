@@ -1,6 +1,6 @@
 from django import forms
 from .models import Schedule,RelayStatus,ScheduleLog
-from simpleduration import Duration
+# from simpleduration import Duration
 from schedule.timer_inputs import timer_hours, timer_minutes
 from datetime import datetime
 
@@ -38,71 +38,71 @@ class TimeInput(forms.TimeInput):
 
 
 class ScheduleForm(forms.Form):
-	run_time_input = forms.TimeField(label='Run Times', widget=TimeInput,required=False)
-	duration_hours = forms.ChoiceField(choices=duration_hour,required=False)
-	duration_minutes = forms.ChoiceField(choices=duration_minute,required=False)
-	how_often_day = forms.ChoiceField(choices=cron_job_week,required=False)
+	# run_time_input = forms.TimeField(label='Run Times', widget=TimeInput,required=False)
+	# duration_hours = forms.ChoiceField(choices=duration_hour,required=False)
+	# duration_minutes = forms.ChoiceField(choices=duration_minute,required=False)
+	# how_often_day = forms.ChoiceField(choices=cron_job_week,required=False)
 
-	run_time_input1 = forms.TimeField(label='',widget=TimeInput, required=False)
-	duration_hours1 = forms.ChoiceField(choices=duration_hour,required=False)
-	duration_minutes1 = forms.ChoiceField(choices=duration_minute,required=False)
-	how_often_day1 = forms.ChoiceField(choices=cron_job_week,required=False)
+	# run_time_input1 = forms.TimeField(label='',widget=TimeInput, required=False)
+	# duration_hours1 = forms.ChoiceField(choices=duration_hour,required=False)
+	# duration_minutes1 = forms.ChoiceField(choices=duration_minute,required=False)
+	# how_often_day1 = forms.ChoiceField(choices=cron_job_week,required=False)
 
-	run_time_input2 = forms.TimeField(label='',widget=TimeInput, required=False)
-	duration_hours2 = forms.ChoiceField(choices=duration_hour,required=False)
-	duration_minutes2 = forms.ChoiceField(choices=duration_minute,required=False)
-	how_often_day2 = forms.ChoiceField(choices=cron_job_week,required=False)
+	# run_time_input2 = forms.TimeField(label='',widget=TimeInput, required=False)
+	# duration_hours2 = forms.ChoiceField(choices=duration_hour,required=False)
+	# duration_minutes2 = forms.ChoiceField(choices=duration_minute,required=False)
+	# how_often_day2 = forms.ChoiceField(choices=cron_job_week,required=False)
 
-	run_time_input3 = forms.TimeField(label='',widget=TimeInput, required=False)
-	duration_hours3 = forms.ChoiceField(choices=duration_hour,required=False)
-	duration_minutes3 = forms.ChoiceField(choices=duration_minute,required=False)
-	how_often_day3 = forms.ChoiceField(choices=cron_job_week,required=False)
+	# run_time_input3 = forms.TimeField(label='',widget=TimeInput, required=False)
+	# duration_hours3 = forms.ChoiceField(choices=duration_hour,required=False)
+	# duration_minutes3 = forms.ChoiceField(choices=duration_minute,required=False)
+	# how_often_day3 = forms.ChoiceField(choices=cron_job_week,required=False)
 
-	run_time_input4 = forms.ChoiceField(choices=cron_job_hours,required=False)
-	duration_hours4 = forms.ChoiceField(choices=duration_hour,required=False)
-	duration_minutes4 = forms.ChoiceField(choices=duration_minute,required=False)
+	# run_time_input4 = forms.ChoiceField(choices=cron_job_hours,required=False)
+	# duration_hours4 = forms.ChoiceField(choices=duration_hour,required=False)
+	# duration_minutes4 = forms.ChoiceField(choices=duration_minute,required=False)
 
-	gpio_pin = forms.ChoiceField(
-		choices=select_gpio_pin,
-		required=False
-	)
-	# gpio_pin_3 = forms.CharField(widget = forms.HiddenInput(), required = False)
-	def clean(self):
-		cleaned_data = super().clean()
-		self.cleaned_data['how_often']=[]
-		self.cleaned_data['how_often_display']=[]
-		gpio_pin=self.cleaned_data['gpio_pin']
-		schedule_job_id = f'update_schedule_job_id_{gpio_pin}'
-		if gpio_pin == '3':
-			run_time_list = [
-				{'job_id':f'{schedule_job_id}','schedule_key': [datetime.now().time(),self.cleaned_data['duration_hours4'],self.cleaned_data['duration_minutes4'],self.cleaned_data['run_time_input4']]},
-			]
-		else:
-			run_time_list = [
-				{'job_id':f'{schedule_job_id}_0','schedule_key': [self.cleaned_data['run_time_input'],self.cleaned_data['duration_hours'],self.cleaned_data['duration_minutes'],self.cleaned_data['how_often_day']]},
-				{'job_id':f'{schedule_job_id}_1','schedule_key': [self.cleaned_data['run_time_input1'],self.cleaned_data['duration_hours1'],self.cleaned_data['duration_minutes1'],self.cleaned_data['how_often_day1']]},
-				{'job_id':f'{schedule_job_id}_2','schedule_key': [self.cleaned_data['run_time_input2'],self.cleaned_data['duration_hours2'],self.cleaned_data['duration_minutes2'],self.cleaned_data['how_often_day2']]},
-				{'job_id':f'{schedule_job_id}_3','schedule_key': [self.cleaned_data['run_time_input3'],self.cleaned_data['duration_hours3'],self.cleaned_data['duration_minutes3'],self.cleaned_data['how_often_day3']]},
-			]
-		for run_time in run_time_list:
-			print(run_time['schedule_key'][0])
-			if run_time['schedule_key'][0] != None:
-				self.cleaned_data['how_often'].append(run_time)
-				if gpio_pin == '3':
-					exhaust_run=self.cleaned_data.get('run_time_input4')
-					exhaust_run_time=dict(self.fields['run_time_input4'].choices)[exhaust_run]
-					print(exhaust_run_time)
-					self.cleaned_data['how_often_display'].append((run_time['schedule_key'][0].strftime("%I:%M:%p"),run_time['schedule_key'][1],run_time['schedule_key'][2],run_time['job_id'],run_time['schedule_key'][3]))
-				else:
-					self.cleaned_data['how_often_display'].append((run_time['schedule_key'][0].strftime("%I:%M:%p"),run_time['schedule_key'][1],run_time['schedule_key'][2],run_time['job_id']))
-		print(self.cleaned_data['how_often'])
-		for often in self.cleaned_data['how_often']:
-			duration_hours = often['schedule_key'][1]
-			duration_minutes = often['schedule_key'][2]
-			duration=Duration(f"{duration_hours} hour {duration_minutes} minute")
-			duration=duration.timedelta()
-			often['schedule_key'].append(duration)
-		print(self.cleaned_data['how_often'])
+	# gpio_pin = forms.ChoiceField(
+	# 	choices=select_gpio_pin,
+	# 	required=False
+	# )
+	# # gpio_pin_3 = forms.CharField(widget = forms.HiddenInput(), required = False)
+	# def clean(self):
+	# 	cleaned_data = super().clean()
+	# 	self.cleaned_data['how_often']=[]
+	# 	self.cleaned_data['how_often_display']=[]
+	# 	gpio_pin=self.cleaned_data['gpio_pin']
+	# 	schedule_job_id = f'update_schedule_job_id_{gpio_pin}'
+	# 	if gpio_pin == '3':
+	# 		run_time_list = [
+	# 			{'job_id':f'{schedule_job_id}','schedule_key': [datetime.now().time(),self.cleaned_data['duration_hours4'],self.cleaned_data['duration_minutes4'],self.cleaned_data['run_time_input4']]},
+	# 		]
+	# 	else:
+	# 		run_time_list = [
+	# 			{'job_id':f'{schedule_job_id}_0','schedule_key': [self.cleaned_data['run_time_input'],self.cleaned_data['duration_hours'],self.cleaned_data['duration_minutes'],self.cleaned_data['how_often_day']]},
+	# 			{'job_id':f'{schedule_job_id}_1','schedule_key': [self.cleaned_data['run_time_input1'],self.cleaned_data['duration_hours1'],self.cleaned_data['duration_minutes1'],self.cleaned_data['how_often_day1']]},
+	# 			{'job_id':f'{schedule_job_id}_2','schedule_key': [self.cleaned_data['run_time_input2'],self.cleaned_data['duration_hours2'],self.cleaned_data['duration_minutes2'],self.cleaned_data['how_often_day2']]},
+	# 			{'job_id':f'{schedule_job_id}_3','schedule_key': [self.cleaned_data['run_time_input3'],self.cleaned_data['duration_hours3'],self.cleaned_data['duration_minutes3'],self.cleaned_data['how_often_day3']]},
+	# 		]
+	# 	for run_time in run_time_list:
+	# 		print(run_time['schedule_key'][0])
+	# 		if run_time['schedule_key'][0] != None:
+	# 			self.cleaned_data['how_often'].append(run_time)
+	# 			if gpio_pin == '3':
+	# 				exhaust_run=self.cleaned_data.get('run_time_input4')
+	# 				exhaust_run_time=dict(self.fields['run_time_input4'].choices)[exhaust_run]
+	# 				print(exhaust_run_time)
+	# 				self.cleaned_data['how_often_display'].append((run_time['schedule_key'][0].strftime("%I:%M:%p"),run_time['schedule_key'][1],run_time['schedule_key'][2],run_time['job_id'],run_time['schedule_key'][3]))
+	# 			else:
+	# 				self.cleaned_data['how_often_display'].append((run_time['schedule_key'][0].strftime("%I:%M:%p"),run_time['schedule_key'][1],run_time['schedule_key'][2],run_time['job_id']))
+	# 	print(self.cleaned_data['how_often'])
+	# 	for often in self.cleaned_data['how_often']:
+	# 		duration_hours = often['schedule_key'][1]
+	# 		duration_minutes = often['schedule_key'][2]
+	# 		duration=Duration(f"{duration_hours} hour {duration_minutes} minute")
+	# 		duration=duration.timedelta()
+	# 		often['schedule_key'].append(duration)
+	# 	print(self.cleaned_data['how_often'])
 		# how_often = self.cleaned_data['how_often']
 		# if how_often.seconds == 0:
 		# 	print('24 Hours')
