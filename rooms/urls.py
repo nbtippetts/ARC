@@ -17,4 +17,5 @@ urlpatterns = [
     path('put_climate/<int:room_id>', views.put_climate, name='put_climate'),
     path('patch_climate/<int:room_id>/<int:climate_id>', views.patch_climate, name='patch_climate'),
     path('delete_climate/<int:room_id>/<int:climate_id>', views.delete_climate, name='delete_climate'),
+    path('relay_control/<int:room_id>', views.relay_control, name='relay_control'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

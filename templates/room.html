@@ -34,6 +34,7 @@
 									<th scope="col">START TIME</th>
 									<th scope="col">END TIME</th>
 									<th scope="col">HOW OFTEN</th>
+									<th scope="col">State</th>
 									<th scope="col">Actions</th>
 								</tr>
 							</thead>
@@ -50,6 +51,25 @@
 									<td>{{ room_climate_schedule.start_time }}</td>
 									<td>{{ room_climate_schedule.end_time }}</td>
 									<td>EveryDay</td>
+									{% for ip_state in room_climate_schedule.IP%}
+									<td>{{ ip_state.state }}</td>
+									<form action="{% url 'relay_control' get_room.id %}" method="POST">
+										{% csrf_token %}
+										<input type="text" hidden name='ip' class="form-control" value="{{ ip_state.ip }}">
+										<input type="text" hidden name='state' class="form-control" value="low">
+											<button type="submit" style="border: 0; background: none;">
+												<i class="fa fa-toggle-on" aria-hidden="true"></i>
+											</button>
+									</form>
+									<form action="{% url 'relay_control' get_room.id %}" method="POST">
+										{% csrf_token %}
+										<input type="text" hidden name='ip' class="form-control" value="{{ ip_state.ip }}">
+										<input type="text" hidden name='state' class="form-control" value="high">
+											<button type="submit" style="border: 0; background: none;">
+												<i class="fa fa-toggle-on" aria-hidden="true"></i>
+											</button>
+									</form>
+									{% endfor %}
 									<td>
 										<a class="fa fa-pencil" data-bs-toggle="modal" data-bs-target="#editScheduleModel" data-bs-whatever="{% url 'patch_schedule' get_room.id room_climate_schedule.climate_schedule_id %}"></a>
 										<form action="{% url 'delete_schedule' get_room.id room_climate_schedule.climate_schedule_id %}" method="POST">
