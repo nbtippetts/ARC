@@ -7,6 +7,35 @@
 <div class="grid-container">
 	<main class="main">
 		<div class="main-cards">
+			<div class="main-overview">
+				{% for ip_state in get_room.ip%}
+				<div class="overviewcard">
+					<div class="overviewcard__icon">{{ ip_state.name }}</div>
+					<div class="overviewcard__info">
+							<td>{{ ip_state.state }}</td>
+							{% if ip_state.state %}
+							<form action="{% url 'relay_control' get_room.id %}" method="POST">
+								{% csrf_token %}
+								<input type="text" hidden name='ip' class="form-control" value="{{ ip_state.ip }}">
+								<input type="text" hidden name='state' class="form-control" value="high">
+								<button type="submit" style="border: 0; background: none;">
+									<i class="fa fa-toggle-on" aria-hidden="true"></i>
+								</button>
+							</form>
+							{% else %}
+							<form action="{% url 'relay_control' get_room.id %}" method="POST">
+								{% csrf_token %}
+								<input type="text" hidden name='ip' class="form-control" value="{{ ip_state.ip }}">
+								<input type="text" hidden name='state' class="form-control" value="low">
+								<button type="submit" style="border: 0; background: none;">
+									<i class="fa fa-toggle-on" aria-hidden="true"></i>
+								</button>
+							</form>
+							{% endif %}
+							{% endfor %}
+					</div>
+				</div>
+			</div>
 			<h1>Climate Reads</h1>
 			<div id="messages"></div>
 					<div class="card">
@@ -16,7 +45,7 @@
 									<h2>Manage <b>Schedules</b></h2>
 								</div>
 								<div class="col-sm-6">
-									<a class="fa fa-coffee" data-bs-toggle="modal" data-bs-target="#addScheduleModal"></a>
+									<a class="arc_buttons" data-bs-toggle="modal" data-bs-target="#addScheduleModal">Schedule</a>
 								</div>
 							</div>
 						</div>
@@ -53,26 +82,70 @@
 									<td>EveryDay</td>
 									{% for ip_state in room_climate_schedule.IP%}
 									<td>{{ ip_state.state }}</td>
-									<form action="{% url 'relay_control' get_room.id %}" method="POST">
-										{% csrf_token %}
-										<input type="text" hidden name='ip' class="form-control" value="{{ ip_state.ip }}">
-										<input type="text" hidden name='state' class="form-control" value="low">
-											<button type="submit" style="border: 0; background: none;">
-												<i class="fa fa-toggle-on" aria-hidden="true"></i>
-											</button>
-									</form>
-									<form action="{% url 'relay_control' get_room.id %}" method="POST">
-										{% csrf_token %}
-										<input type="text" hidden name='ip' class="form-control" value="{{ ip_state.ip }}">
-										<input type="text" hidden name='state' class="form-control" value="high">
-											<button type="submit" style="border: 0; background: none;">
-												<i class="fa fa-toggle-on" aria-hidden="true"></i>
-											</button>
-									</form>
 									{% endfor %}
 									<td>
 										<a class="fa fa-pencil" data-bs-toggle="modal" data-bs-target="#editScheduleModel" data-bs-whatever="{% url 'patch_schedule' get_room.id room_climate_schedule.climate_schedule_id %}"></a>
 										<form action="{% url 'delete_schedule' get_room.id room_climate_schedule.climate_schedule_id %}" method="POST">
+											{% csrf_token %}
+											<a class="tooltips" data-toggle="tooltip" data-placement="top" title="Delete">
+												<button type="submit" onclick="return confirm('Are you sure to delete this course ?');" style="border: 0; background: none;">
+													<i class="fa fa-trash-o" aria-hidden="true"></i>
+												</button>
+											</a>
+										</form>
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+						</div>
+					</div>
+					<div class="card">
+						<div class="table-title">
+							<div class="row">
+								<div class="col-sm-6">
+									<h2>Manage <b>Intervals</b></h2>
+								</div>
+								<div class="col-sm-6">
+									<a class="arc_buttons" data-bs-toggle="modal" data-bs-target="#addIntervalModal">Interval</a>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+						<table class="table table-hover table-bordered">
+							<thead class="thead-dark">
+								<tr>
+									<th>
+										<span class="custom-checkbox">
+											<input type="checkbox" id="selectAll">
+											<label for="selectAll"></label>
+										</span>
+									</th>
+									<th scope="col">NAME</th>
+									<th scope="col">Run Every</th>
+									<th scope="col">For</th>
+									<th scope="col">State</th>
+									<th scope="col">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for room_climate_interval in get_room.climate_interval %}
+								<tr>
+									<th scope="row">
+										<span class="custom-checkbox">
+											<input type="checkbox" id="checkbox{{ room_climate_interval.climate_interval_id }}" name="options[{{ get_room.id }}, {{ room_climate_interval.climate_interval_id }}]" value="{{ room_climate_interval.climate_interval_id }}">
+											<label for="checkbox{{ room_climate_interval.climate_interval_id }}"></label>
+										</span>
+									</th>
+									<td>{{ room_climate_interval.name }}</td>
+									<td>{{ room_climate_interval.interval_hour }}:{{ room_climate_interval.interval_minute }}</td>
+									<td>{{ room_climate_interval.duration_hour }}:{{ room_climate_interval.duration_minute }}</td>
+									{% for ip_state in room_climate_interval.IP%}
+									<td>{{ ip_state.state }}</td>
+									{% endfor %}
+									<td>
+										<a class="fa fa-pencil" data-bs-toggle="modal" data-bs-target="#editScheduleModel" data-bs-whatever="{% url 'patch_schedule' get_room.id room_climate_interval.climate_interval_id %}"></a>
+										<form action="{% url 'delete_interval' get_room.id room_climate_interval.climate_interval_id %}" method="POST">
 											{% csrf_token %}
 											<a class="tooltips" data-toggle="tooltip" data-placement="top" title="Delete">
 												<button type="submit" onclick="return confirm('Are you sure to delete this course ?');" style="border: 0; background: none;">
@@ -261,6 +334,41 @@
 					<div class="form-group">
 						<label>HOW OFTEN</label>
 						<input type="text" name='how_often' class="form-control" value="*" placeholder="HOW OFTEN">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Add</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="addIntervalModal" tabindex="-1" aria-labelledby="intervalModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="intervalModalLabel">New message</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form action="{% url 'put_schedule' get_room.id %}" method="POST">
+					{% csrf_token %}
+					<div class="form-group">
+						<label for="ips">Relay</label>
+						<select id="ips" name="ip">
+							{% for ip in valid_climate_schedule_ips %}
+								<option value="{{ ip.id }}|{{ ip.name }}">{{ ip.name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Run Every</label>
+						<input type="number" name='interval_hour' class="form-control" value="0"placeholder="Hour" min="0" max="23">
+						<input type="number" name='interval_minute' class="form-control" value="0"placeholder="Minute" min="0" max="60">
+						<label>FOR</label>
+						<input type="number" name='duration_hour' class="form-control" value="0"placeholder="Hour" min="0" max="23">
+						<input type="number" name='duration_minute' class="form-control" value="0"placeholder="Minute" min="0" max="60">
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

@@ -6,15 +6,26 @@
 <script src="{% static 'js/climate_data.js' %}"></script>
 <div class="grid-container">
 	<main class="main">
-		<form action="{% url 'put_room' %}" method="POST" class="form-inline">
-			{% csrf_token %}
-			<div class="form-group mx-sm-3 mb-2">
-				<label for="room" class="sr-only">Room</label>
-				<input type="text" class="form-control" name='name' id="room" placeholder="Name">
-			</div>
-			<button type="submit" class="arc_buttons mb-2">Create Room</button>
-		</form>
+			<div class="main-overview">
+				<div class="overviewcard">
+					<div class="overviewcard__icon">Create Room</div>
+					<div class="overviewcard__info">
+						<form action="{% url 'put_room' %}" method="POST" class="form-inline">
+						{% csrf_token %}
+						<div class="form-group mx-sm-3 mb-2">
+							<label for="room" class="sr-only">Room</label>
+							<input type="text" class="form-control" name='name' id="room" placeholder="Name">
+						</div>
+						<button type="submit" class="arc_buttons mb-2">Create Room</button>
+						</form>
+					</div>
+				</div>
+				</div>
+
 		{% for ip in get_ip %}
+		<div class="overviewcard">
+			<div class="overviewcard__icon">{{ ip.name }}</div>
+			<div class="overviewcard__info">
 			<form action="{% url 'put_ip' ip.id %}" method="POST" class="form-inline">
 				{% csrf_token %}
 				<div class="form-group">
@@ -25,13 +36,15 @@
 						{% endfor %}
 					</select>
 				</div>
-				<div class="form-group mx-sm-3 mb-2">
+				<div class="form-group">
 					<label for="ip" class="sr-only">IP</label>
-					<input type="text" readonly name='ip' class="form-control" value="{{ ip.name }}">
+					<input type="text" hidden name='ip' class="form-control" value="{{ ip.name }}">
 				</div>
 				<button type="submit" class="arc_buttons mb-2">Add Realy</button>
 			</form>
-		{% empty %}
+			</div>
+			</div>
+
 		{% endfor %}
 		<h1>Climate Reads</h1>
 		<div class="main-cards">
