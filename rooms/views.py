@@ -46,10 +46,21 @@ def get_room(request,room_id):
 		if ip['name'] in climate_schedule_check:
 			climate_schedule_ips.append(ip)
 
+	logs_url = f"http://127.0.0.1:5000/room/{room_id}/ips"
+	logs_res = requests.get(logs_url)
+	logs = logs_res.json()
+	log_dict={}
+	for log in logs:
+		if log['climate_schedule_log']:
+			log_dict.update({log['name']:log['climate_schedule_log']})
+		if log['climate_log']:
+			log_dict.update({log['name']:log['climate_log']})
+
 	context = {
 		'get_room': response.json(),
 		'valid_climate_ips': climate_ips,
-		'valid_climate_schedule_ips': climate_schedule_ips
+		'valid_climate_schedule_ips': climate_schedule_ips,
+		'logs': log_dict
 	}
 	return render(request, 'room.html',context)
 def put_room(request):
@@ -118,18 +129,6 @@ def put_ip(request, ip_id):
 		}
 		return redirect('/rooms', context)
 
-def get_schedule(request, room_id):
-	url = f"http://127.0.0.1:5000/room/{room_id}/relayschedule"
-	# url = f"http://10.42.0.1:5000/room/{room_id}/relayschedule"
-	response = requests.get(url)
-	url = f"http://127.0.0.1:5000/room/{room_id}/ips"
-	# url = f"http://10.42.0.1:5000/room/{room_id}/ips"
-	ip_response = requests.get(url)
-	context = {
-		'get_schedule': response.json(),
-		'get_ips': ip_response.json()
-	}
-	return render(request, 'schedule.html',context)
 def put_schedule(request, room_id):
 	if request.method == 'POST':
 		ip_data = request.POST['ip'].split('|')
@@ -232,18 +231,6 @@ def delete_interval(request,room_id, climate_interval_id):
 		}
 		return redirect(f'/rooms/get_room/{room_id}', context)
 
-def get_climate(request, room_id):
-	url = f"http://127.0.0.1:5000/room/{room_id}/climate"
-	# url = f"http://10.42.0.1:5000/room/{room_id}/climate"
-	response = requests.get(url)
-	url = f"http://127.0.0.1:5000/room/{room_id}/ips"
-	# url = f"http://10.42.0.1:5000/room/{room_id}/ips"
-	ip_response = requests.get(url)
-	context = {
-		'get_climate': response.json(),
-		'get_ips': ip_response.json()
-	}
-	return render(request, 'climate.html',context)
 def put_climate(request, room_id):
 	if request.method == 'POST':
 		url = f'http://127.0.0.1:5000/room/{room_id}/climate'

@@ -32,10 +32,11 @@
 								</button>
 							</form>
 							{% endif %}
-							{% endfor %}
+						</div>
 					</div>
-				</div>
+					{% endfor %}
 			</div>
+
 			<h1>Climate Reads</h1>
 			<div id="messages"></div>
 					<div class="card">
@@ -225,6 +226,93 @@
 						</table>
 					</div>
 				</div>
+					<div class="card">
+						<div class="table-title">
+							<div class="row">
+								<div class="col-sm-6">
+									<h2>Lighting LOGS</b></h2>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<table class="table table-hover table-bordered">
+								<thead class="thead-dark">
+									<tr>
+										<th scope="col">NAME</th>
+										<th scope="col">Start Time</th>
+										<th scope="col">End Time</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for log in logs.Light %}
+									<tr>
+										<td>{{ log.name }}</td>
+										<td>{{ log.start_time }}</td>
+										<td>{{ log.end_time }}%</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="card">
+						<div class="table-title">
+							<div class="row">
+								<div class="col-sm-6">
+									<h2>Watering LOGS</b></h2>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<table class="table table-hover table-bordered">
+								<thead class="thead-dark">
+									<tr>
+										<th scope="col">NAME</th>
+										<th scope="col">Start Time</th>
+										<th scope="col">End Time</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for log in logs.Water %}
+									<tr>
+										<td>{{ log.name }}</td>
+										<td>{{ log.start_time }}</td>
+										<td>{{ log.end_time }}%</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="card">
+						<div class="table-title">
+							<div class="row">
+								<div class="col-sm-6">
+									<h2>Climate LOGS</b></h2>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<table class="table table-hover table-bordered">
+								<thead class="thead-dark">
+									<tr>
+										<th scope="col">CO2</th>
+										<th scope="col">Humidity</th>
+										<th scope="col">Temperature</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for log in logs.Climate %}
+									<tr>
+										<td>{{ log.co2 }}</td>
+										<td>{{ log.humidity }}</td>
+										<td>{{ log.temperature }}%</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
 		</div>
 	</main>
 </div>
