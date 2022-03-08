@@ -189,7 +189,7 @@
 									<th scope="col">Humidity</th>
 									<th scope="col">Humidity Relay</th>
 									<th scope="col">Temperature</th>
-									<th scope="col">Temperature Relay</th>
+									<th scope="col">Exhaust Relay</th>
 									<th scope="col">Actions</th>
 								</tr>
 							</thead>
@@ -274,6 +274,93 @@
 								</thead>
 								<tbody>
 									{% for log in logs.Water %}
+									<tr>
+										<td>{{ log.name }}</td>
+										<td>{{ log.start_time }}</td>
+										<td>{{ log.end_time }}%</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="card">
+						<div class="table-title">
+							<div class="row">
+								<div class="col-sm-6">
+									<h2>CO2 LOGS</b></h2>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<table class="table table-hover table-bordered">
+								<thead class="thead-dark">
+									<tr>
+										<th scope="col">NAME</th>
+										<th scope="col">Start Time</th>
+										<th scope="col">End Time</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for log in logs.CO2 %}
+									<tr>
+										<td>{{ log.name }}</td>
+										<td>{{ log.start_time }}</td>
+										<td>{{ log.end_time }}%</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="card">
+						<div class="table-title">
+							<div class="row">
+								<div class="col-sm-6">
+									<h2>Humidity LOGS</b></h2>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<table class="table table-hover table-bordered">
+								<thead class="thead-dark">
+									<tr>
+										<th scope="col">NAME</th>
+										<th scope="col">Start Time</th>
+										<th scope="col">End Time</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for log in logs.Humidity %}
+									<tr>
+										<td>{{ log.name }}</td>
+										<td>{{ log.start_time }}</td>
+										<td>{{ log.end_time }}%</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="card">
+						<div class="table-title">
+							<div class="row">
+								<div class="col-sm-6">
+									<h2>Exhaust LOGS</b></h2>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<table class="table table-hover table-bordered">
+								<thead class="thead-dark">
+									<tr>
+										<th scope="col">NAME</th>
+										<th scope="col">Start Time</th>
+										<th scope="col">End Time</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for log in logs.Exhaust %}
 									<tr>
 										<td>{{ log.name }}</td>
 										<td>{{ log.start_time }}</td>

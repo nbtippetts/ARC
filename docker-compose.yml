@@ -14,14 +14,38 @@ services:
     restart: unless-stopped
     volumes:
       - .:/code
+      - static_volume:/arc/static  # <-- bind the static volume
+      - media_volume:/arc/media  # <-- bind the media volume
     ports:
       - "8000:8000"
     networks:
       - webnet
       - redisnet
+      - nginx_network
     links:
       - redis
 
+  nginx:
+    restart: always
+    build: ./nginx
+    volumes:
+      - .:/arc
+      - static_volume:/arc/static  # <-- bind the static volume
+      - media_volume:/arc/media  # <-- bind the media volume
+    ports:
+      - 1914:80
+    depends_on:
+      - web
+    networks:  # <-- here
+      - nginx_network
 networks:
+  nginx_network:
+    driver: bridge
   webnet:
+    driver: bridge
   redisnet:
+    driver: bridge
+
+volumes:
+    static_volume:
+    media_volume:
