@@ -6,51 +6,42 @@
 <script src="{% static 'js/climate_data.js' %}"></script>
 <div class="grid-container">
 	<main class="main">
-		<div class="main-cards">
-			<div class="main-overview">
-				{% for ip_state in get_room.ip%}
-				<div class="overviewcard">
-					<div class="overviewcard__icon">{{ ip_state.name }}</div>
-					<div class="overviewcard__info">
-							<td>{{ ip_state.state }}</td>
-							{% if ip_state.state %}
-							<form action="{% url 'relay_control' get_room.id %}" method="POST">
-								{% csrf_token %}
-								<input type="text" hidden name='ip' class="form-control" value="{{ ip_state.ip }}">
-								<input type="text" hidden name='state' class="form-control" value="high">
-								<button type="submit" style="border: 0; background: none;">
-									<i class="fa fa-toggle-on" aria-hidden="true"></i>
-								</button>
-							</form>
-							{% else %}
-							<form action="{% url 'relay_control' get_room.id %}" method="POST">
-								{% csrf_token %}
-								<input type="text" hidden name='ip' class="form-control" value="{{ ip_state.ip }}">
-								<input type="text" hidden name='state' class="form-control" value="low">
-								<button type="submit" style="border: 0; background: none;">
-									<i class="fa fa-toggle-on" aria-hidden="true"></i>
-								</button>
-							</form>
-							{% endif %}
-						</div>
+		<div class="main-overview">
+			{% for ip_state in get_room.ip%}
+			<div class="overviewcard">
+				<div class="overviewcard__icon">{{ ip_state.name }}</div>
+				<div class="overviewcard__info">
+						<div id="{{ ip_state.name }}-{{ get_room.id }}"></div>
+						<div>{{ ip_state.state }}</div>
+						{% if ip_state.state %}
+						<form action="{% url 'relay_control' get_room.id %}" method="POST">
+							{% csrf_token %}
+							<input type="text" hidden name='ip' class="form-control" value="{{ ip_state.ip }}">
+							<input type="text" hidden name='state' class="form-control" value="high">
+							<button type="submit" style="border: 0; background: none;">
+								<i class="fa fa-toggle-on" aria-hidden="true"></i>
+							</button>
+						</form>
+						{% else %}
+						<form action="{% url 'relay_control' get_room.id %}" method="POST">
+							{% csrf_token %}
+							<input type="text" hidden name='ip' class="form-control" value="{{ ip_state.ip }}">
+							<input type="text" hidden name='state' class="form-control" value="low">
+							<button type="submit" style="border: 0; background: none;">
+								<i class="fa fa-toggle-on" aria-hidden="true"></i>
+							</button>
+						</form>
+						{% endif %}
 					</div>
-					{% endfor %}
-			</div>
-
-			<h1>Climate Reads</h1>
-			<div id="messages"></div>
-					<div class="card">
-						<div class="table-title">
-							<div class="row">
-								<div class="col-sm-6">
-									<h2>Manage <b>Schedules</b></h2>
-								</div>
-								<div class="col-sm-6">
-									<a class="arc_buttons" data-bs-toggle="modal" data-bs-target="#addScheduleModal">Schedule</a>
-								</div>
-							</div>
-						</div>
-						<div class="card-body">
+				</div>
+				{% endfor %}
+		</div>
+		<div class="main-cards">
+			<div class="card">
+				<h5 class="card-header">Manage Schedules
+					<a class="btn btn-dark" style="float: right;" data-bs-toggle="modal" data-bs-target="#addScheduleModal">Create Schedule</a>
+				</h5>
+				<div class="card-body">
 						<table class="table table-hover table-bordered">
 							<thead class="thead-dark">
 								<tr>
@@ -85,7 +76,7 @@
 									<td>{{ ip_state.state }}</td>
 									{% endfor %}
 									<td>
-										<a class="fa fa-pencil" data-bs-toggle="modal" data-bs-target="#editScheduleModel" data-bs-whatever="{% url 'patch_schedule' get_room.id room_climate_schedule.climate_schedule_id %}"></a>
+										<a class="fa fa-pencil" data-bs-toggle="modal" data-bs-target="#editScheduleModal" data-bs-whatever="{% url 'patch_schedule' get_room.id room_climate_schedule.climate_schedule_id %}"></a>
 										<form action="{% url 'delete_schedule' get_room.id room_climate_schedule.climate_schedule_id %}" method="POST">
 											{% csrf_token %}
 											<a class="tooltips" data-toggle="tooltip" data-placement="top" title="Delete">
@@ -101,18 +92,10 @@
 						</table>
 						</div>
 					</div>
-					<div class="card">
-						<div class="table-title">
-							<div class="row">
-								<div class="col-sm-6">
-									<h2>Manage <b>Intervals</b></h2>
-								</div>
-								<div class="col-sm-6">
-									<a class="arc_buttons" data-bs-toggle="modal" data-bs-target="#addIntervalModal">Interval</a>
-								</div>
-							</div>
-						</div>
-						<div class="card-body">
+			<div class="card">
+				<h5 class="card-header">Manage Intervals
+					<a class="btn btn-dark" style="float: right;" data-bs-toggle="modal" data-bs-target="#addIntervalModal">Create Schedule Interval</a></h5>
+				<div class="card-body">
 						<table class="table table-hover table-bordered">
 							<thead class="thead-dark">
 								<tr>
@@ -145,7 +128,7 @@
 									<td>{{ ip_state.state }}</td>
 									{% endfor %}
 									<td>
-										<a class="fa fa-pencil" data-bs-toggle="modal" data-bs-target="#editScheduleModel" data-bs-whatever="{% url 'patch_schedule' get_room.id room_climate_interval.climate_interval_id %}"></a>
+										<a class="fa fa-pencil" data-bs-toggle="modal" data-bs-target="#editIntervalModal" data-bs-whatever="{% url 'patch_interval' get_room.id room_climate_interval.climate_interval_id %}"></a>
 										<form action="{% url 'delete_interval' get_room.id room_climate_interval.climate_interval_id %}" method="POST">
 											{% csrf_token %}
 											<a class="tooltips" data-toggle="tooltip" data-placement="top" title="Delete">
@@ -162,18 +145,10 @@
 						</div>
 					</div>
 					<div class="card">
-						<div class="table-title">
-							<div class="row">
-								<div class="col-sm-6">
-									<h2>Manage <b>Climate</b></h2>
-								</div>
-								<div class="col-sm-6">
-									<a class="fa fa-coffee" data-bs-toggle="modal" data-bs-target="#addClimateModel"></a>
-								</div>
-							</div>
-						</div>
+						<h5 class="card-header">Manage Climate
+							<a class="btn btn-dark" style="float: right;" data-bs-toggle="modal" data-bs-target="#addClimateModal">Create Climate Parameters</a>
+						</h5>
 						<div class="card-body">
-						<div class="card-title" id="climate-data-{{ get_room.id }}"></div>
 						<table class="table table-hover table-bordered">
 							<thead class="thead-dark">
 								<tr>
@@ -185,11 +160,11 @@
 									</th>
 									<th scope="col">NAME</th>
 									<th scope="col">CO2</th>
-									<th scope="col">CO2 Relay</th>
+									<th scope="col">CO2 Automation</th>
 									<th scope="col">Humidity</th>
-									<th scope="col">Humidity Relay</th>
+									<th scope="col">Humidity Automation</th>
 									<th scope="col">Temperature</th>
-									<th scope="col">Exhaust Relay</th>
+									<th scope="col">Exhaust Automation</th>
 									<th scope="col">Actions</th>
 								</tr>
 							</thead>
@@ -210,7 +185,7 @@
 									<td>{{ room_climate.temperature_parameters }}</td>
 									<td>{{ room_climate.exhaust_relay_ip }}</td>
 									<td>
-										<a class="fa fa-pencil" data-bs-toggle="modal" data-bs-target="#editClimateModel" data-bs-whatever="{% url 'patch_climate' get_room.id room_climate.climate_id %}"></a>
+										<a class="fa fa-pencil" data-bs-toggle="modal" data-bs-target="#editClimateModal" data-bs-whatever="{% url 'patch_climate' get_room.id room_climate.climate_id %}"></a>
 										<form action="{% url 'delete_climate' get_room.id room_climate.climate_id %}" method="POST">
 											{% csrf_token %}
 											<a class="tooltips" data-toggle="tooltip" data-placement="top" title="Delete">
@@ -227,13 +202,7 @@
 					</div>
 				</div>
 					<div class="card">
-						<div class="table-title">
-							<div class="row">
-								<div class="col-sm-6">
-									<h2>Lighting LOGS</b></h2>
-								</div>
-							</div>
-						</div>
+						<h5 class="card-header">Lighting LOG</h5>
 						<div class="card-body">
 							<table class="table table-hover table-bordered">
 								<thead class="thead-dark">
@@ -256,13 +225,7 @@
 						</div>
 					</div>
 					<div class="card">
-						<div class="table-title">
-							<div class="row">
-								<div class="col-sm-6">
-									<h2>Watering LOGS</b></h2>
-								</div>
-							</div>
-						</div>
+						<h5 class="card-header">Watering LOGS</h5>
 						<div class="card-body">
 							<table class="table table-hover table-bordered">
 								<thead class="thead-dark">
@@ -285,13 +248,7 @@
 						</div>
 					</div>
 					<div class="card">
-						<div class="table-title">
-							<div class="row">
-								<div class="col-sm-6">
-									<h2>CO2 LOGS</b></h2>
-								</div>
-							</div>
-						</div>
+						<h5 class="card-header">CO2 LOGS</h5>
 						<div class="card-body">
 							<table class="table table-hover table-bordered">
 								<thead class="thead-dark">
@@ -314,13 +271,7 @@
 						</div>
 					</div>
 					<div class="card">
-						<div class="table-title">
-							<div class="row">
-								<div class="col-sm-6">
-									<h2>Humidity LOGS</b></h2>
-								</div>
-							</div>
-						</div>
+						<h5 class="card-header">Humidity LOG</h5>
 						<div class="card-body">
 							<table class="table table-hover table-bordered">
 								<thead class="thead-dark">
@@ -343,13 +294,7 @@
 						</div>
 					</div>
 					<div class="card">
-						<div class="table-title">
-							<div class="row">
-								<div class="col-sm-6">
-									<h2>Exhaust LOGS</b></h2>
-								</div>
-							</div>
-						</div>
+						<h5 class="card-header">Exhaust LOGS</h5>
 						<div class="card-body">
 							<table class="table table-hover table-bordered">
 								<thead class="thead-dark">
@@ -372,13 +317,7 @@
 						</div>
 					</div>
 					<div class="card">
-						<div class="table-title">
-							<div class="row">
-								<div class="col-sm-6">
-									<h2>Climate LOGS</b></h2>
-								</div>
-							</div>
-						</div>
+						<h5 class="card-header">Climate LOGS</h5>
 						<div class="card-body">
 							<table class="table table-hover table-bordered">
 								<thead class="thead-dark">
@@ -403,7 +342,7 @@
 		</div>
 	</main>
 </div>
-<div class="modal fade" id="addClimateModel" tabindex="-1" aria-labelledby="climateModalLabel" aria-hidden="true">
+<div class="modal fade" id="addClimateModal" tabindex="-1" aria-labelledby="climateModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -442,7 +381,7 @@
 	</div>
 </div>
 
-<div class="modal fade" id="editClimateModel" tabindex="-1" aria-labelledby="climateModalLabel" aria-hidden="true">
+<div class="modal fade" id="editClimateModal" tabindex="-1" aria-labelledby="climateModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -519,42 +458,7 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="addIntervalModal" tabindex="-1" aria-labelledby="intervalModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="intervalModalLabel">New message</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				<form action="{% url 'put_schedule' get_room.id %}" method="POST">
-					{% csrf_token %}
-					<div class="form-group">
-						<label for="ips">Relay</label>
-						<select id="ips" name="ip">
-							{% for ip in valid_climate_schedule_ips %}
-								<option value="{{ ip.id }}|{{ ip.name }}">{{ ip.name }}</option>
-							{% endfor %}
-						</select>
-					</div>
-					<div class="form-group">
-						<label>Run Every</label>
-						<input type="number" name='interval_hour' class="form-control" value="0"placeholder="Hour" min="0" max="23">
-						<input type="number" name='interval_minute' class="form-control" value="0"placeholder="Minute" min="0" max="60">
-						<label>FOR</label>
-						<input type="number" name='duration_hour' class="form-control" value="0"placeholder="Hour" min="0" max="23">
-						<input type="number" name='duration_minute' class="form-control" value="0"placeholder="Minute" min="0" max="60">
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary">Add</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="editScheduleModel" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editScheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -585,11 +489,73 @@
 		</div>
 	</div>
 </div>
+<div class="modal fade" id="addIntervalModal" tabindex="-1" aria-labelledby="intervalModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="intervalModalLabel">New message</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form action="{% url 'put_schedule' get_room.id %}" method="POST">
+					{% csrf_token %}
+					<div class="form-group">
+						<label for="ips">Relay</label>
+						<select id="ips" name="ip">
+							{% for ip in valid_climate_interval_ips %}
+								<option value="{{ ip.id }}|{{ ip.name }}">{{ ip.name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Run Every</label>
+						<input type="number" name='interval_hour' class="form-control" value="0"placeholder="Hour" min="0" max="23">
+						<input type="number" name='interval_minute' class="form-control" value="0"placeholder="Minute" min="0" max="60">
+						<label>FOR</label>
+						<input type="number" name='duration_hour' class="form-control" value="0"placeholder="Hour" min="0" max="23">
+						<input type="number" name='duration_minute' class="form-control" value="0"placeholder="Minute" min="0" max="60">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Add</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="editIntervalModal" tabindex="-1" aria-labelledby="intervalModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="intervalModalLabel">New message</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form action="" method="POST">
+					{% csrf_token %}
+					<div class="form-group">
+						<label>Run Every</label>
+						<input type="number" name='interval_hour' class="form-control" value="0" placeholder="Hour" min="0" max="23">
+						<input type="number" name='interval_minute' class="form-control" value="0" placeholder="Minute" min="0" max="60">
+						<label>FOR</label>
+						<input type="number" name='duration_hour' class="form-control" value="0" placeholder="Hour" min="0" max="23">
+						<input type="number" name='duration_minute' class="form-control" value="0" placeholder="Minute" min="0" max="60">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Save</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 
 <script>
 	$(document).ready(function () {
-		var scheduleModel = document.getElementById('editScheduleModel')
-		scheduleModel.addEventListener('show.bs.modal', function (event) {
+		var scheduleModal = document.getElementById('editScheduleModal')
+		scheduleModal.addEventListener('show.bs.modal', function (event) {
 			// Button that triggered the modal
 			var button = event.relatedTarget
 			// Extract info from data-bs-* attributes
@@ -598,16 +564,16 @@
 			// and then do the updating in a callback.
 			//
 			// Update the modal's content.
-			var modalTitle = scheduleModel.querySelector('.modal-title')
-			var modalBodyInput = scheduleModel.querySelector('.modal-body form')
+			var modalTitle = scheduleModal.querySelector('.modal-title')
+			var modalBodyInput = scheduleModal.querySelector('.modal-body form')
 			console.log(recipient)
 			console.log(modalTitle)
 			modalTitle.textContent = 'New message to ' + recipient
 			modalBodyInput.setAttribute('action', recipient);
 			console.log(modalBodyInput)
 		})
-		var climateModel = document.getElementById('editClimateModel')
-		climateModel.addEventListener('show.bs.modal', function (event) {
+		var climateModal = document.getElementById('editClimateModal')
+		climateModal.addEventListener('show.bs.modal', function (event) {
 			// Button that triggered the modal
 			var button = event.relatedTarget
 			// Extract info from data-bs-* attributes
@@ -616,8 +582,26 @@
 			// and then do the updating in a callback.
 			//
 			// Update the modal's content.
-			var modalTitle = climateModel.querySelector('.modal-title')
-			var modalBodyInput = climateModel.querySelector('.modal-body form')
+			var modalTitle = climateModal.querySelector('.modal-title')
+			var modalBodyInput = climateModal.querySelector('.modal-body form')
+			console.log(recipient)
+			console.log(modalTitle)
+			modalTitle.textContent = 'New message to ' + recipient
+			modalBodyInput.setAttribute('action', recipient);
+			console.log(modalBodyInput)
+		})
+		var intervalModal = document.getElementById('editIntervalModal')
+		intervalModal.addEventListener('show.bs.modal', function (event) {
+			// Button that triggered the modal
+			var button = event.relatedTarget
+			// Extract info from data-bs-* attributes
+			var recipient = button.getAttribute('data-bs-whatever')
+			// If necessary, you could initiate an AJAX request here
+			// and then do the updating in a callback.
+			//
+			// Update the modal's content.
+			var modalTitle = intervalModal.querySelector('.modal-title')
+			var modalBodyInput = intervalModal.querySelector('.modal-body form')
 			console.log(recipient)
 			console.log(modalTitle)
 			modalTitle.textContent = 'New message to ' + recipient

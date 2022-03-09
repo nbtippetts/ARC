@@ -140,3 +140,12 @@ tbody {
     color: #22333B;
     color: rgb(34, 51, 59);
   }
+
+.card-header {
+	width: -webkit-fill-available;
+	background-color:transparent;
+    border-bottom: transparent;
+}
+.card-body {
+	width: -webkit-fill-available;
+}

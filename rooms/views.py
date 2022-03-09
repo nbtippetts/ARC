@@ -42,13 +42,19 @@ def get_room(request,room_id):
 	climate_ips={}
 	climate_check=['Exhaust','Humidity','CO2']
 	climate_schedule_ips=[]
+	climate_interval_ips=[]
 	climate_schedule_check=['Light','Water', 'Exhaust', 'Humidity', 'CO2']
 	for ip in res['ip']:
 		if ip['name'] in climate_check:
 			climate_ips[ip['name']]=ip
 		if ip['name'] in climate_schedule_check:
 			climate_schedule_ips.append(ip)
+			climate_interval_ips.append(ip)
 	for x in res['climate_interval']:
+		for y in climate_interval_ips:
+			if x['name'] in y.values():
+				climate_interval_ips.remove(y)
+	for x in res['climate_schedule']:
 		for y in climate_schedule_ips:
 			if x['name'] in y.values():
 				climate_schedule_ips.remove(y)
@@ -63,16 +69,16 @@ def get_room(request,room_id):
 	logs_res = requests.get(logs_url)
 	logs = logs_res.json()
 	log_dict={}
-	for log in logs:
-		if log['climate_schedule_log']:
-			log_dict.update({log['name']:log['climate_schedule_log']})
-		if log['climate_log']:
-			log_dict.update({log['name']:log['climate_log']})
+	for key,log in enumerate(logs['climate_schedule_log']):
+		log_dict.update({log[key]['name']:log})
+	for key,log in enumerate(logs['climate_log']):
+		log_dict.update({'Climate':log})
 
 	context = {
 		'get_room': response.json(),
 		'valid_climate_ips': climate_ips,
 		'valid_climate_schedule_ips': climate_schedule_ips,
+		'valid_climate_interval_ips': climate_interval_ips,
 		'logs': log_dict
 	}
 	return render(request, 'room.html',context)
@@ -208,13 +214,9 @@ def patch_schedule(request, room_id, climate_schedule_id):
 		start = request.POST['start_time']
 		end = request.POST['end_time']
 		how_often = request.POST['how_often']
-		ip_id=1
-		payload={'start_time': start.replace('T', ' '), 'end_time': end.replace('T', ' '), 'how_often': how_often, 'ip_id':ip_id}
+		payload={'start_time': start.replace('T', ' '), 'end_time': end.replace('T', ' '), 'how_often': how_often}
 		response = requests.patch(url, data=payload)
 		print(response.status_code)
-		# context = {
-		# 	'put_schedule': response.text
-		# }
 		return redirect(f'/rooms/get_room/{room_id}')
 
 def delete_schedule(request,room_id, climate_schedule_id):
@@ -234,16 +236,14 @@ def patch_interval(request, room_id, climate_interval_id):
 		# url = f"http://192.168.1.37:5000/room/{room_id}/relayinterval/{climate_interval_id}"
 		# url = f"http://10.42.0.1:5000/room/{room_id}/relayinterval/{climate_interval_id}"
 		# name = request.POST['name']
-		start = request.POST['start_time']
-		end = request.POST['end_time']
-		how_often = request.POST['how_often']
-		ip_id=1
-		payload={'start_time': start.replace('T', ' '), 'end_time': end.replace('T', ' '), 'how_often': how_often, 'ip_id':ip_id}
+		payload={
+			'interval_hour':request.POST['interval_hour'],
+			'interval_minute':request.POST['interval_minute'],
+			'duration_hour':request.POST['duration_hour'],
+			'duration_minute':request.POST['duration_minute'],
+		}
 		response = requests.patch(url, data=payload)
 		print(response.status_code)
-		# context = {
-		# 	'put_schedule': response.text
-		# }
 		return redirect(f'/rooms/get_room/{room_id}')
 
 def delete_interval(request,room_id, climate_interval_id):

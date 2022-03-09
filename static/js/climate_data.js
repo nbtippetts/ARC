@@ -1,15 +1,19 @@
-// let url = `ws://${window.location.host}/ws/socket-server/`
+let url = `ws://${window.location.host}/ws/socket-server/`
 
-// const climateSocket = new WebSocket(url)
+const climateSocket = new WebSocket(url)
 
-// climateSocket.onmessage = function (e) {
-//   let data = JSON.parse(e.data)
-//   console.log('Data:', data)
+climateSocket.onmessage = function (e) {
+  let data = JSON.parse(e.data)
+  console.log('Data:', data)
 
-//   if (data.type === 'room') {
-//     let messages = document.getElementById('climate-data-' + data.room_id)
+  if (data.type === 'room') {
+    let co2 = document.getElementById('CO2-' + data.room_id)
+	let humidity = document.getElementById('Humidity-' + data.room_id)
+	  let temperature = document.getElementById('Exhaust-' + data.room_id)
 
-//     messages.innerText = `CO2: ${data.message.co2} Humidity: ${data.message.humidity} Temperature: ${data.message.temperature}`
+	  co2.innerText = `${data.message.co2}`
+	  humidity.innerText = `${data.message.humidity}`
+	  temperature.innerText = `${data.message.temperature}`
 
-//   }
-// }
+  }
+}
