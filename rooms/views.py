@@ -66,7 +66,8 @@ def get_room(request,room_id):
 
 	# logs_url = f"http://127.0.0.1:5000/room/{room_id}/ips"
 	# logs_url = f"http://192.168.1.37:5000/room/{room_id}/ips"
-	# logs_res = requests.get(logs_url)
+	logs_url = f"http:/10.42.0.1:5000/room/{room_id}/ips"
+	logs_res = requests.get(logs_url)
 	logs = logs_res.json()
 	# print(logs)
 	log_dict={}
