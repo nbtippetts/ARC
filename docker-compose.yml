@@ -14,6 +14,8 @@ services:
     restart: unless-stopped
     volumes:
       - .:/code
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
       - static_volume:/arc/static  # <-- bind the static volume
       - media_volume:/arc/media  # <-- bind the media volume
     ports:
@@ -26,7 +28,7 @@ services:
       - redis
 
   nginx:
-    restart: always
+    restart: unless-stopped
     build: ./nginx
     volumes:
       - .:/arc
