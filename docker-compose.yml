@@ -16,8 +16,8 @@ services:
       - .:/code
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - static_volume:/arc/static  # <-- bind the static volume
-      - media_volume:/arc/media  # <-- bind the media volume
+      - static_volume:/code/static  # <-- bind the static volume
+      - media_volume:/code/media  # <-- bind the media volume
     ports:
       - "8000:8000"
     networks:
@@ -31,9 +31,9 @@ services:
     restart: unless-stopped
     build: ./nginx
     volumes:
-      - .:/arc
-      - static_volume:/arc/static  # <-- bind the static volume
-      - media_volume:/arc/media  # <-- bind the media volume
+      - .:/code
+      - static_volume:/code/static  # <-- bind the static volume
+      - media_volume:/code/media  # <-- bind the media volume
     ports:
       - 1914:80
     depends_on:

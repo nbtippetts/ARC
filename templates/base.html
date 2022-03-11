@@ -15,36 +15,41 @@
   {% load static %}
   <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
   <link href="{% static 'css/main.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+  <script defer src="{% static 'fontawesome/js/all.min.js' %}"></script>
   <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+  <script src="{% static 'bootstrap/js/jquery.min.js' %}"></script>
+  <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/jquery.js' %}"></script>
 
   <style>
     @font-face {
       font-family:'helvetica-bold';
-      src: url("{% static 'fonts/Helvetica-Bold.ttf' %}");
+      src: local('helvetica-bold'),url("{% static 'fonts/Helvetica-Bold.ttf' %}");
     }
     @font-face {
       font-family:'helvetica-boldoblique';
-      src: url("{% static 'fonts/Helvetica-BoldOblique.ttf' %}");
+      src: local('helvetica-boldoblique'),url("{% static 'fonts/Helvetica-BoldOblique.ttf' %}");
     }
     @font-face {
       font-family:'helvetica-light';
-      src: url("{% static 'fonts/helvetica-light-587ebe5a59211.ttf' %}");
+      src: local('helvetica-light'),url("{% static 'fonts/helvetica-light-587ebe5a59211.ttf' %}");
     }
     @font-face {
       font-family:'helvetica-oblique';
-      src: url("{% static 'fonts/Helvetica-Oblique.ttf' %}");
+      src: local('helvetica-oblique'),url("{% static 'fonts/Helvetica-Oblique.ttf' %}");
     }
     @font-face {
-      font-family:'helvetica';
-      src: url("{% static 'fonts/Helvetica.ttf' %}");
+      font-family:'Helvetica';
+      src: local('Helvetica'),url("{% static 'fonts/Helvetica.ttf' %}");
     }
     @font-face {
-      font-family:'MBF_prime';
-      src: url("{% static 'fonts/MBF_Prime.otf' %}");
+      font-family:'MBF prime';
+      src: local('MBF prime'),url("{% static 'fonts/MBF_Prime.otf' %}");
     }
     @font-face {
-      font-family:'monaco_linux';
-      src: url("{% static 'fonts/Monaco_Linux.ttf' %}");
+      font-family:'Monaco';
+      src: local('Monaco'),url("{% static 'fonts/Monaco_Linux.ttf' %}");
     }
     @media screen and (min-width: 0px) and (max-width: 765px) {
       #chart_content {

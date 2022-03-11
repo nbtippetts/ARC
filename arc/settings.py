@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap5',
+    'bootstrap',
+    'fontawesome',
     'fontawesomefree',
     'jquery',
     'django_forms_bootstrap',
