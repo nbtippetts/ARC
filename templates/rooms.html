@@ -70,7 +70,7 @@
 											{% csrf_token %}
 											<a class="tooltips" data-toggle="tooltip" data-placement="top" title="Delete">
 												<button type="submit" onclick="return confirm('Are you sure to delete this course ?');" style="border: 0; background: none;">
-													<i class="fab fa-trash" aria-hidden="true"></i>
+													<i class="fas fa-trash-alt"></i>
 												</button>
 											</a>
 										</form>
@@ -127,7 +127,7 @@
 							<form action="{% url 'delete_room' room.id %}" method="POST">
 								{% csrf_token %}
 								<button type="submit">
-									<i class="fas fa-trash-alt" type="submit"></i>
+									<i class="fas fa-trash-alt"></i>
 								</button>
 							</form>
 						</div>
