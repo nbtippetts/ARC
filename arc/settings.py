@@ -46,10 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap5',
     'bootstrap',
-    'fontawesome',
-    'fontawesomefree',
+    'django_static_fontawesome',
     'jquery',
     'django_forms_bootstrap',
     'rooms'

@@ -15,7 +15,6 @@ constantly==15.1.0
 cryptography==36.0.1
 daphne==3.0.2
 Django==4.0.2
-django-bootstrap-v5==1.0.8
 django-forms-bootstrap==3.1.0
 django-rest-live==0.7.0
 djangorestframework==3.13.1
@@ -44,6 +43,6 @@ uvicorn==0.17.5
 zipp==3.7.0
 zope.interface==5.4.0
 tzlocal
-fontawesomefree
 django-jquery
 django-bootstrap-static
+django-static-fontawesome
