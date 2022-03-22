@@ -3,17 +3,21 @@ let url = `ws://${window.location.host}/ws/socket-server/`
 const climateSocket = new WebSocket(url)
 
 climateSocket.onmessage = function (e) {
-  let data = JSON.parse(e.data)
-  console.log('Data:', data)
+	let data = JSON.parse(e.data)
+	console.log('Data:', data)
 
-  if (data.type === 'room') {
-    let co2 = document.getElementById('CO2-' + data.room_id)
-	let humidity = document.getElementById('Humidity-' + data.room_id)
-	  let temperature = document.getElementById('Exhaust-' + data.room_id)
-
-	  co2.innerText = `${data.message.co2}`
-	  humidity.innerText = `${data.message.humidity}`
-	  temperature.innerText = `${data.message.temperature}`
-
-  }
+	if (data.type === 'room') {
+		try {
+			let co2 = document.getElementById('CO2-' + data.room_id)
+			co2.innerText = `CO2: ${data.message.co2}`
+		} catch (e) { }
+		try {
+			let humidity = document.getElementById('Humidity-' + data.room_id)
+			humidity.innerText = `Humidity: ${data.message.humidity}`
+		} catch (e) { }
+		try {
+			let temperature = document.getElementById('Exhaust-' + data.room_id)
+			temperature.innerText = `Exhaust: ${data.message.temperature}`
+		} catch (e) { }
+	}
 }
