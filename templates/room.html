@@ -11,7 +11,9 @@
 			<div class="overviewcard">
 				<div class="overviewcard__icon">{{ ip_state.name }}</div>
 				<div class="overviewcard__info">
-						<div id="{{ ip_state.name }}-{{ get_room.id }}"></div>
+						<div id="CO2-{{ get_room.id }}"></div>
+						<div id="Humidity-{{ get_room.id }}"></div>
+						<div id="Exhaust-{{ get_room.id }}"></div>
 						<div>{{ ip_state.state }}</div>
 						{% if ip_state.state %}
 						<form action="{% url 'relay_control' get_room.id %}" method="POST">
@@ -152,13 +154,8 @@
 						<table class="table table-hover table-bordered">
 							<thead class="thead-dark">
 								<tr>
-									<th>
-										<span class="custom-checkbox">
-											<input type="checkbox" id="selectAll">
-											<label for="selectAll"></label>
-										</span>
-									</th>
 									<th scope="col">NAME</th>
+									<th scope="col">Buffer</th>
 									<th scope="col">CO2</th>
 									<th scope="col">CO2 Automation</th>
 									<th scope="col">Humidity</th>
@@ -171,13 +168,8 @@
 							<tbody>
 								{% for room_climate in get_room.climate %}
 								<tr>
-									<th scope="row">
-										<span class="custom-checkbox">
-											<input type="checkbox" id="checkbox{{ room_climate.climate_id }}" name="options[{{ get_room.id }}, {{ room_climate.climate_id }}]" value="{{ room_climate.climate_id }}">
-											<label for="checkbox{{ room_climate.climate_id }}"></label>
-										</span>
-									</th>
 									<td>{{ room_climate.name }}</td>
+									<td>{{ room_climate.buffer_parameters }}</td>
 									<td>{{ room_climate.co2_parameters }}</td>
 									<td>{{ room_climate.co2_relay_ip }}</td>
 									<td>{{ room_climate.humidity_parameters }}</td>
@@ -357,6 +349,10 @@
 					<input type="text" name='name' class="form-control" placeholder="Name">
 				</div>
 				<div class="form-group">
+					<label>Buffer</label>
+					<input type="text" name='buffer_parameters' class="form-control" placeholder="Buffer">
+				</div>
+				<div class="form-group">
 					<label>CO2 Parameters</label>
 					<input type="text" name='co2_parameters' class="form-control" placeholder="CO2">
 					<input type="text" hidden name='co2_ip' class="form-control" value="{{ valid_climate_ips.CO2.ip }}">
@@ -394,6 +390,10 @@
 					<div class="form-group">
 						<label>NAME</label>
 						<input type="text" name='name' class="form-control" placeholder="Name">
+					</div>
+					<div class="form-group">
+						<label>Buffer</label>
+						<input type="text" name='buffer_parameters' class="form-control" placeholder="Buffer">
 					</div>
 					<div class="form-group">
 						<label>CO2 Parameters</label>

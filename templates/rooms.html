@@ -53,7 +53,11 @@
 					<h5 class="card-header"><a href="{% url 'get_room' room.id %}">{{ room.name }}</a></h5>
 					<div class="card-body">
 						{% for ip in room.ip %}
-							<div class="card-title" id="{{ ip.name }}-{{ room.id }}"></div>
+							<div class="card-title">
+								<div id="CO2-{{ room.id }}"></div>
+								<div id="Humidity-{{ room.id }}"></div>
+								<div id="Exhaust-{{ room.id }}"></div>
+							</div>
 						{% endfor %}
 							<table class="table table-hover table-bordered">
 								<thead class="thead-dark">
