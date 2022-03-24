@@ -13,11 +13,11 @@ climateSocket.onmessage = function (e) {
 		} catch (e) { }
 		try {
 			let humidity = document.getElementById('Humidity-' + data.room_id)
-			humidity.innerText = `Humidity: ${data.message.humidity}`
+			humidity.innerText = `Humidity: ${data.message.humidity}%`
 		} catch (e) { }
 		try {
 			let temperature = document.getElementById('Exhaust-' + data.room_id)
-			temperature.innerText = `Exhaust: ${data.message.temperature}`
+			temperature.innerText = `Temperature: ${data.message.temperature}\u2109`
 		} catch (e) { }
 	}
 }

@@ -209,7 +209,7 @@
 									<tr>
 										<td>{{ log.name }}</td>
 										<td>{{ log.start_time }}</td>
-										<td>{{ log.end_time }}%</td>
+										<td>{{ log.end_time }}</td>
 									</tr>
 									{% endfor %}
 								</tbody>
@@ -232,7 +232,7 @@
 									<tr>
 										<td>{{ log.name }}</td>
 										<td>{{ log.start_time }}</td>
-										<td>{{ log.end_time }}%</td>
+										<td>{{ log.end_time }}</td>
 									</tr>
 									{% endfor %}
 								</tbody>
@@ -255,7 +255,7 @@
 									<tr>
 										<td>{{ log.name }}</td>
 										<td>{{ log.start_time }}</td>
-										<td>{{ log.end_time }}%</td>
+										<td>{{ log.end_time }}</td>
 									</tr>
 									{% endfor %}
 								</tbody>
@@ -278,7 +278,7 @@
 									<tr>
 										<td>{{ log.name }}</td>
 										<td>{{ log.start_time }}</td>
-										<td>{{ log.end_time }}%</td>
+										<td>{{ log.end_time }}</td>
 									</tr>
 									{% endfor %}
 								</tbody>
@@ -301,7 +301,7 @@
 									<tr>
 										<td>{{ log.name }}</td>
 										<td>{{ log.start_time }}</td>
-										<td>{{ log.end_time }}%</td>
+										<td>{{ log.end_time }}</td>
 									</tr>
 									{% endfor %}
 								</tbody>
@@ -323,8 +323,8 @@
 									{% for log in logs.Climate %}
 									<tr>
 										<td>{{ log.co2 }}</td>
-										<td>{{ log.humidity }}</td>
-										<td>{{ log.temperature }}%</td>
+										<td>{{ log.humidity }}%</td>
+										<td>{{ log.temperature }}<span>&#8457;</span></td>
 									</tr>
 									{% endfor %}
 								</tbody>

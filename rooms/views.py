@@ -7,6 +7,7 @@ import requests
 def get_all_rooms(request):
 	# url = "http://127.0.0.1:5000/rooms"
 	url = "http://192.168.1.32:5000/rooms"
+	# url = "http://192.168.1.37:5000/rooms"
 	# url = "http://10.42.0.1:5000/rooms"
 	rooms_response = requests.get(url)
 	if rooms_response.status_code == 409:
@@ -18,6 +19,7 @@ def get_all_rooms(request):
 		return render(request, 'rooms.html',context)
 	# url = f"http://127.0.0.1:5000/all_ips"
 	url = f"http://192.168.1.32:5000/all_ips"
+	# url = f"http://192.168.1.37:5000/all_ips"
 	# url = f"http://10.42.0.1:5000/all_ips"
 	ip_response = requests.get(url)
 	if ip_response.status_code == 200:
@@ -36,6 +38,7 @@ def get_all_rooms(request):
 def get_room(request,room_id):
 	# url = f"http://127.0.0.1:5000/room/{room_id}"
 	url = f"http://192.168.1.32:5000/room/{room_id}"
+	# url = f"http://192.168.1.37:5000/room/{room_id}"
 	# url = f"http://10.42.0.1:5000/room/{room_id}"
 	response = requests.get(url)
 	res = response.json()
@@ -66,6 +69,7 @@ def get_room(request,room_id):
 
 	# logs_url = f"http://127.0.0.1:5000/room/{room_id}/ips"
 	logs_url = f"http://192.168.1.32:5000/room/{room_id}/ips"
+	# logs_url = f"http://192.168.1.37:5000/room/{room_id}/ips"
 	# logs_url = f"http://10.42.0.1:5000/room/{room_id}/ips"
 	logs_res = requests.get(logs_url)
 	logs = logs_res.json()
@@ -97,6 +101,7 @@ def put_room(request):
 	if request.method == 'POST':
 		# url = f'http://127.0.0.1:5000/rooms'
 		url = f'http://192.168.1.32:5000/rooms'
+		# url = f'http://192.168.1.37:5000/rooms'
 		# url = f'http://10.42.0.1:5000/rooms'
 		response = requests.get(url)
 		if response.status_code==200:
@@ -107,6 +112,7 @@ def put_room(request):
 			room_id=1
 		# url = f'http://127.0.0.1:5000/room/{room_id}'
 		url = f'http://192.168.1.32:5000/room/{room_id}'
+		# url = f'http://192.168.1.37:5000/room/{room_id}'
 		# url = f'http://10.42.0.1:5000/room/{room_id}'
 		name = request.POST['name']
 		payload={'name': name}
@@ -121,6 +127,7 @@ def patch_room(request,room_id):
 	if request.method == 'POST':
 		# url = f'http://127.0.0.1:5000/room/{room_id}'
 		url = f'http://192.168.1.32:5000/room/{room_id}'
+		# url = f'http://192.168.1.37:5000/room/{room_id}'
 		# url = f'http://10.42.0.1:5000/room/{room_id}'
 		name = request.POST['name']
 		payload={'name': name}
@@ -134,6 +141,7 @@ def patch_room(request,room_id):
 def delete_room(request,room_id):
 	# url = f"http://127.0.0.1:5000/room/{room_id}"
 	url = f"http://192.168.1.32:5000/room/{room_id}"
+	# url = f"http://192.168.1.37:5000/room/{room_id}"
 	# url = f"http://10.42.0.1:5000/room/{room_id}"
 	response = requests.delete(url)
 	print(response.status_code)
@@ -142,6 +150,7 @@ def delete_room(request,room_id):
 def delete_ip(request,room_id,ip_id):
 	# url = f'http://127.0.0.1:5000/room/{room_id}/ip/{ip_id}'
 	url = f'http://192.168.1.32:5000/room/{room_id}/ip/{ip_id}'
+	# url = f'http://192.168.1.37:5000/room/{room_id}/ip/{ip_id}'
 	# url = f'http://10.42.0.1:5000/room/{room_id}/ip/{ip_id}'
 	response = requests.delete(url)
 	print(response.status_code)
@@ -156,6 +165,7 @@ def put_ip(request, ip_id):
 		ip=request.POST['ip']
 		# url = f'http://127.0.0.1:5000/room/{room_id}/ip/{ip_id}'
 		url = f'http://192.168.1.32:5000/room/{room_id}/ip/{ip_id}'
+		# url = f'http://192.168.1.37:5000/room/{room_id}/ip/{ip_id}'
 		# url = f'http://10.42.0.1:5000/room/{room_id}/ip/{ip_id}'
 		payload={'IP':ip, 'name': name, 'room_id': room_id}
 		response = requests.patch(url, data=payload)
@@ -173,6 +183,7 @@ def put_schedule(request, room_id):
 		if 'interval_hour' in request.POST:
 			# url = f'http://127.0.0.1:5000/relayinterval'
 			url = f'http://192.168.1.32:5000/relayinterval'
+			# url = f'http://192.168.1.37:5000/relayinterval'
 			# url = f'http://10.42.0.1:5000/relayinterval'
 			response = requests.get(url)
 			relayinterval = response.json()
@@ -183,6 +194,7 @@ def put_schedule(request, room_id):
 				relayinterval_id=1
 			# url = f'http://127.0.0.1:5000/room/{room_id}/relayinterval/{relayinterval_id}'
 			url = f'http://192.168.1.32:5000/room/{room_id}/relayinterval/{relayinterval_id}'
+			# url = f'http://192.168.1.37:5000/room/{room_id}/relayinterval/{relayinterval_id}'
 			# url = f'http://10.42.0.1:5000/room/{room_id}/relayinterval/{relayinterval_id}'
 			payload={
 				'name': name,
@@ -198,6 +210,7 @@ def put_schedule(request, room_id):
 		else:
 			# url = f'http://127.0.0.1:5000/relayschedule'
 			url = f'http://192.168.1.32:5000/relayschedule'
+			# url = f'http://192.168.1.37:5000/relayschedule'
 			# url = f'http://10.42.0.1:5000/relayschedule'
 			response = requests.get(url)
 			relayschedule = response.json()
@@ -208,6 +221,7 @@ def put_schedule(request, room_id):
 				relayschedule_id=1
 			# url = f'http://127.0.0.1:5000/room/{room_id}/relayschedule/{relayschedule_id}'
 			url = f'http://192.168.1.32:5000/room/{room_id}/relayschedule/{relayschedule_id}'
+			# url = f'http://192.168.1.37:5000/room/{room_id}/relayschedule/{relayschedule_id}'
 			# url = f'http://10.42.0.1:5000/room/{room_id}/relayschedule/{relayschedule_id}'
 			start = request.POST['start_time']
 			end = request.POST['end_time']
@@ -220,6 +234,7 @@ def patch_schedule(request, room_id, climate_schedule_id):
 	if request.method == 'POST':
 		# url = f"http://127.0.0.1:5000/room/{room_id}/relayschedule/{climate_schedule_id}"
 		url = f"http://192.168.1.32:5000/room/{room_id}/relayschedule/{climate_schedule_id}"
+		# url = f"http://192.168.1.37:5000/room/{room_id}/relayschedule/{climate_schedule_id}"
 		# url = f"http://10.42.0.1:5000/room/{room_id}/relayschedule/{climate_schedule_id}"
 		# name = request.POST['name']
 		start = request.POST['start_time']
@@ -234,6 +249,7 @@ def delete_schedule(request,room_id, climate_schedule_id):
 	if request.method == 'POST':
 		# url = f"http://127.0.0.1:5000/room/{room_id}/relayschedule/{climate_schedule_id}"
 		url = f"http://192.168.1.32:5000/room/{room_id}/relayschedule/{climate_schedule_id}"
+		# url = f"http://192.168.1.37:5000/room/{room_id}/relayschedule/{climate_schedule_id}"
 		# url = f"http://10.42.0.1:5000/room/{room_id}/relayschedule/{climate_schedule_id}"
 		response = requests.delete(url)
 		print(response.text)
@@ -245,6 +261,7 @@ def patch_interval(request, room_id, climate_interval_id):
 	if request.method == 'POST':
 		# url = f"http://127.0.0.1:5000/room/{room_id}/relayinterval/{climate_interval_id}"
 		url = f"http://192.168.1.32:5000/room/{room_id}/relayinterval/{climate_interval_id}"
+		# url = f"http://192.168.1.37:5000/room/{room_id}/relayinterval/{climate_interval_id}"
 		# url = f"http://10.42.0.1:5000/room/{room_id}/relayinterval/{climate_interval_id}"
 		# name = request.POST['name']
 		payload={
@@ -261,6 +278,7 @@ def delete_interval(request,room_id, climate_interval_id):
 	if request.method == 'POST':
 		# url = f"http://127.0.0.1:5000/room/{room_id}/relayinterval/{climate_interval_id}"
 		url = f"http://192.168.1.32:5000/room/{room_id}/relayinterval/{climate_interval_id}"
+		# url = f"http://192.168.1.37:5000/room/{room_id}/relayinterval/{climate_interval_id}"
 		# url = f"http://10.42.0.1:5000/room/{room_id}/relayinterval/{climate_interval_id}"
 		response = requests.delete(url)
 		print(response.text)
@@ -273,6 +291,7 @@ def put_climate(request, room_id):
 	if request.method == 'POST':
 		# url = f'http://127.0.0.1:5000/room/{room_id}/climate'
 		url = f'http://192.168.1.32:5000/room/{room_id}/climate'
+		# url = f'http://192.168.1.37:5000/room/{room_id}/climate'
 		# url = f'http://10.42.0.1:5000/room/{room_id}/climate'
 		response = requests.get(url)
 		climate = response.json()
@@ -283,6 +302,7 @@ def put_climate(request, room_id):
 			climate_id=1
 		# url = f'http://127.0.0.1:5000/room/{room_id}/climate/{climate_id}'
 		url = f'http://192.168.1.32:5000/room/{room_id}/climate/{climate_id}'
+		# url = f'http://192.168.1.37:5000/room/{room_id}/climate/{climate_id}'
 		# url = f'http://10.42.0.1:5000/room/{room_id}/climate/{climate_id}'
 		payload = {
 			'name':request.POST['name'],
@@ -301,6 +321,7 @@ def patch_climate(request, room_id, climate_id):
 	if request.method == 'POST':
 		# url = f"http://127.0.0.1:5000/room/{room_id}/climate/{climate_id}"
 		url = f"http://192.168.1.32:5000/room/{room_id}/climate/{climate_id}"
+		# url = f"http://192.168.1.37:5000/room/{room_id}/climate/{climate_id}"
 		# url = f"http://10.42.0.1:5000/room/{room_id}/climate/{climate_id}"
 		payload = {
 			'name':request.POST['name'],
@@ -319,6 +340,7 @@ def delete_climate(request,room_id, climate_id):
 	if request.method == 'POST':
 		# url = f"http://127.0.0.1:5000/room/{room_id}/climate/{climate_id}"
 		url = f"http://192.168.1.32:5000/room/{room_id}/climate/{climate_id}"
+		# url = f"http://192.168.1.37:5000/room/{room_id}/climate/{climate_id}"
 		# url = f"http://10.42.0.1:5000/room/{room_id}/climate/{climate_id}"
 		response = requests.delete(url)
 		print(response.text)
@@ -331,6 +353,7 @@ def relay_control(request, room_id):
 	if request.method == 'POST':
 		# url = f"http://127.0.0.1:5000//relay_control"
 		url = f"http://192.168.1.32:5000//relay_control"
+		# url = f"http://192.168.1.37:5000//relay_control"
 		# url = f"http://10.42.0.1:5000/room/{room_id}/climate"
 		payload={'ip': request.POST['ip'],'state': request.POST['state']}
 		response = requests.get(url,params=payload)
