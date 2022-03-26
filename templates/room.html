@@ -155,13 +155,16 @@
 							<thead class="thead-dark">
 								<tr>
 									<th scope="col">NAME</th>
-									<th scope="col">Buffer</th>
 									<th scope="col">CO2</th>
+									<th scope="col">CO2 Buffer</th>
 									<th scope="col">CO2 Automation</th>
 									<th scope="col">Humidity</th>
 									<th scope="col">Humidity Automation</th>
 									<th scope="col">Temperature</th>
 									<th scope="col">Exhaust Automation</th>
+									<th scope="col">Buffer</th>
+									<th scope="col">Start Time</th>
+									<th scope="col">End Time</th>
 									<th scope="col">Actions</th>
 								</tr>
 							</thead>
@@ -169,13 +172,21 @@
 								{% for room_climate in get_room.climate %}
 								<tr>
 									<td>{{ room_climate.name }}</td>
-									<td>{{ room_climate.buffer_parameters }}</td>
 									<td>{{ room_climate.co2_parameters }}</td>
+									<td>{{ room_climate.co2_buffer_parameters }}</td>
 									<td>{{ room_climate.co2_relay_ip }}</td>
 									<td>{{ room_climate.humidity_parameters }}</td>
 									<td>{{ room_climate.humidity_relay_ip }}</td>
 									<td>{{ room_climate.temperature_parameters }}</td>
 									<td>{{ room_climate.exhaust_relay_ip }}</td>
+									<td>{{ room_climate.buffer_parameters }}</td>
+									{% for climate_day_night in room_climate.climate_day_night %}
+										<td>{{ climate_day_night.climate_start_time }}</td>
+										<td>{{ climate_day_night.climate_end_time }}</td>
+										{% empty %}
+										<td>False</td>
+										<td>False</td>
+									{% endfor %}
 									<td>
 										<a class="fa fa-edit" data-toggle="modal" data-target="#editClimateModal" data-whatever="{% url 'patch_climate' get_room.id room_climate.climate_id %}"></a>
 										<form action="{% url 'delete_climate' get_room.id room_climate.climate_id %}" method="POST">
@@ -349,13 +360,13 @@
 					<input type="text" name='name' class="form-control" placeholder="Name">
 				</div>
 				<div class="form-group">
-					<label>Buffer</label>
-					<input type="text" name='buffer_parameters' class="form-control" placeholder="Buffer">
-				</div>
-				<div class="form-group">
 					<label>CO2 Parameters</label>
 					<input type="text" name='co2_parameters' class="form-control" placeholder="CO2">
 					<input type="text" hidden name='co2_ip' class="form-control" value="{{ valid_climate_ips.CO2.ip }}">
+				</div>
+				<div class="form-group">
+					<label>CO2 Buffer</label>
+					<input type="text" name='co2_buffer_parameters' class="form-control" placeholder="CO2 Buffer">
 				</div>
 				<div class="form-group">
 					<label>Humidity Parameters</label>
@@ -366,6 +377,16 @@
 					<label>Temperature Parameters</label>
 					<input type="text" name='temperature_parameters' class="form-control" placeholder="Temperature">
 					<input type="text" hidden name='exhaust_ip' class="form-control" value="{{ valid_climate_ips.Exhaust.ip }}">
+				</div>
+				<div class="form-group">
+					<label>Buffer</label>
+					<input type="text" name='buffer_parameters' class="form-control" placeholder="Buffer">
+				</div>
+				<div class="form-group">
+					<label>Start Time</label>
+					<input type="time"name='climate_start_time' class="form-control" placeholder="Start Time">
+					<label>End Time</label>
+					<input type="time" name='climate_end_time' class="form-control" placeholder="End Time">
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -392,13 +413,13 @@
 						<input type="text" name='name' class="form-control" placeholder="Name">
 					</div>
 					<div class="form-group">
-						<label>Buffer</label>
-						<input type="text" name='buffer_parameters' class="form-control" placeholder="Buffer">
-					</div>
-					<div class="form-group">
 						<label>CO2 Parameters</label>
 						<input type="text" name='co2_parameters' class="form-control" placeholder="CO2">
 						<input type="text" hidden name='co2_ip' class="form-control" value="{{ valid_climate_ips.CO2.ip }}">
+					</div>
+					<div class="form-group">
+						<label>CO2 Buffer</label>
+						<input type="text" name='co2_buffer_parameters' class="form-control" placeholder="CO2 Buffer">
 					</div>
 					<div class="form-group">
 						<label>Humidity Parameters</label>
@@ -409,6 +430,16 @@
 						<label>Temperature Parameters</label>
 						<input type="text" name='temperature_parameters' class="form-control" placeholder="Temperature">
 						<input type="text" hidden name='exhaust_ip' class="form-control" value="{{ valid_climate_ips.Exhaust.ip }}">
+					</div>
+					<div class="form-group">
+						<label>Buffer</label>
+						<input type="text" name='buffer_parameters' class="form-control" placeholder="Buffer">
+					</div>
+					<div class="form-group">
+						<label>Start Time</label>
+						<input type="time" name='climate_start_time' class="form-control" placeholder="Start Time">
+						<label>End Time</label>
+						<input type="time" name='climate_end_time' class="form-control" placeholder="End Time">
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
