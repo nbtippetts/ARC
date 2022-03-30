@@ -36,10 +36,7 @@ INSTALLED_APPS = [
     'channels',
     # 'rooms.apps.RoomsConfig',
     'users.apps.UsersConfig',
-    'climate.apps.ClimateConfig',
-    'schedule.apps.ScheduleConfig',
     'notebook.apps.NotebookConfig',
-    'allthelogs.apps.AllthelogsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -79,8 +76,6 @@ TEMPLATES = [
             ],
 
             'libraries':{
-                'schedule_display': 'schedule.templatetags.schedule_display',
-                'logging_display': 'allthelogs.templatetags.logging_display',
             },
         },
     },
@@ -168,7 +163,7 @@ MEDIAFILES_DIRS = (
     os.path.join(BASE_DIR, 'media'),
 )
 
-LOGIN_REDIRECT_URL='schedule'
+LOGIN_REDIRECT_URL='rooms'
 LOGIN_URL='login'
 EMAIL_BACKED='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST='stmp.gmail.com'

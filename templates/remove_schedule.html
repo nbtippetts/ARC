@@ -1,7 +1,0 @@
-{% load static %}
-
-<form action="{% url 'remove_schedule_view' %}" method="POST" class="schedule_form">
-	{% csrf_token %}
-	{{ form }}
-	<button type="submit" class="arc_buttons" value="Submit">Delete</button>
-</form>

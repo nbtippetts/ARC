@@ -48,5 +48,4 @@ urlpatterns = [
     path('', views.homepage, name='homepage'),
     path('rooms/', include('rooms.urls')),
     path('notebook/', include('notebook.urls')),
-    path('allthelogs/', include('allthelogs.urls')),
 ]
