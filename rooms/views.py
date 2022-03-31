@@ -22,17 +22,24 @@ def get_all_rooms(request):
 	# url = f"http://192.168.1.37:5000/all_ips"
 	# url = f"http://10.42.0.1:5000/all_ips"
 	ip_response = requests.get(url)
+	# url = "http://127.0.0.1:5000/ap_jobs"
+	url = "http://192.168.1.42:5000/ap_jobs"
+	# url = "http://192.168.1.37:5000/ap_jobs"
+	# url = "http://10.42.0.1:5000/ap_jobs"
+	ap_jobs_response = requests.get(url)
 	if ip_response.status_code == 200:
 		context = {
 			'get_all_rooms': rooms_response.json(),
 			'room_id':len(rooms_response.json()),
-			'get_ip': ip_response.json()
+			'get_ip': ip_response.json(),
+			'ap_job_info': ap_jobs_response.text
 		}
 	else:
 		context = {
 			'get_all_rooms': rooms_response.json(),
 			'room_id':len(rooms_response.json()),
-			'get_ip': []
+			'get_ip': [],
+			'ap_job_info': ap_jobs_response.text
 		}
 	return render(request, 'rooms.html',context)
 def get_room(request,room_id):
