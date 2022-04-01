@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<link href="{% static 'css/schedule.css' %}" rel="stylesheet">
+<link href="{% static 'css/main.css' %}" rel="stylesheet">
 <script src="{% static 'js/climate_data.js' %}"></script>
 <div class="grid-container">
 	<main class="main">
-			<div class="main-overview">
+			<div class="rooms-main-overview">
 				<div class="overviewcard">
 					<div class="overviewcard__icon">Create Room</div>
 					<div class="overviewcard__info">
@@ -19,125 +19,131 @@
 						</form>
 					</div>
 				</div>
-				</div>
+		</div>
 
 		{% for ip in get_ip %}
+		<div class="rooms-main-overview">
 		<div class="overviewcard">
 			<div class="overviewcard__icon">{{ ip.name }}</div>
-			<div class="overviewcard__info">
-			<form action="{% url 'put_ip' ip.id %}" method="POST" class="form-inline">
-				{% csrf_token %}
-				<div class="form-group">
-					<label for="rooms">Room</label>
-					<select id="rooms" name="room_id">
-						{% for room in get_all_rooms %}
-						<option value="{{ room.id }}">{{ room.name }}</option>
-						{% endfor %}
-					</select>
+				<div class="overviewcard__info">
+				<form action="{% url 'put_ip' ip.id %}" method="POST" class="form-inline">
+					{% csrf_token %}
+					<div class="form-group">
+						<label for="rooms">Room</label>
+						<select id="rooms" name="room_id">
+							{% for room in get_all_rooms %}
+							<option value="{{ room.id }}">{{ room.name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="ip" class="sr-only">IP</label>
+						<input type="text" hidden name='ip' class="form-control" value="{{ ip.name }}">
+					</div>
+					<button type="submit" class="arc_buttons mb-2">Add Realy</button>
+				</form>
 				</div>
-				<div class="form-group">
-					<label for="ip" class="sr-only">IP</label>
-					<input type="text" hidden name='ip' class="form-control" value="{{ ip.name }}">
-				</div>
-				<button type="submit" class="arc_buttons mb-2">Add Realy</button>
-			</form>
 			</div>
-			</div>
+		</div>
 
 		{% endfor %}
 		{{ ap_job_info }}
-		<h1>Climate Reads</h1>
 		<div class="main-cards">
 			{% for room in get_all_rooms %}
 				<div class="card">
-					<h5 class="card-header"><a href="{% url 'get_room' room.id %}">{{ room.name }}</a></h5>
+					<h5 class="card-header">{{ room.name }}</h5>
 					<div class="card-body">
-						{% for ip in room.ip %}
-							<div class="card-title">
+						<div class="card-title">
+							{% for ip in room.ip %}
 								<div id="CO2-{{ room.id }}"></div>
 								<div id="Humidity-{{ room.id }}"></div>
 								<div id="Exhaust-{{ room.id }}"></div>
-							</div>
-						{% endfor %}
-							<table class="table table-hover table-bordered">
-								<thead class="thead-dark">
+							{% endfor %}
+						</div>
+					<div class="row justify-content-center">
+						<div class="col-auto">
+							<table class="table table-bordered table-responsive">
+								<thead>
 									<tr>
-										<th scope="col">Name</th>
-										<th scope="col">IP</th>
+										<th>Name</th>
+										<th>IP</th>
+										<th>Action</th>
 									</tr>
 								</thead>
 								<tbody>
 									{% for room_ip in room.ip %}
 									<tr>
-										<th scope="row">{{ room_ip.name }}</th>
+										<th>{{ room_ip.name }}</th>
 										<td>{{ room_ip.ip }}</td>
-									</tr>
-									<td>
-										<form action="{% url 'delete_ip' room.id room_ip.id %}" method="POST">
-											{% csrf_token %}
-											<a class="tooltips" data-toggle="tooltip" data-placement="top" title="Delete">
-												<button type="submit" onclick="return confirm('Are you sure to delete this course ?');" style="border: 0; background: none;">
-													<i class="fas fa-trash-alt"></i>
-												</button>
-											</a>
-										</form>
-									</td>
-									{% endfor %}
-								</tbody>
-							</table>
-							<table class="table table-hover table-bordered">
-								<thead class="thead-dark">
-									<tr>
-										<th scope="col">NAME</th>
-										<th scope="col">START TIME</th>
-										<th scope="col">END TIME</th>
-										<th scope="col">HOW OFTEN</th>
-									</tr>
-								</thead>
-								<tbody>
-									{% for room_climate_schedule in room.climate_schedule %}
-									<tr>
-										<th scope="row">{{ room_climate_schedule.name }}</th>
-										<td>{{ room_climate_schedule.start_time }}</td>
-										<td>{{ room_climate_schedule.end_time }}</td>
-										<td>{{ room_climate_schedule.how_often }}</td>
+										<td>
+											<form action="{% url 'delete_ip' room.id room_ip.id %}" method="POST">
+												{% csrf_token %}
+												<a class="tooltips" data-toggle="tooltip" data-placement="top" title="Delete">
+													<button type="submit" onclick="return confirm('Are you sure to delete this course ?');" style="border: 0; background: none;">
+														<i class="fas fa-trash-alt"></i>
+													</button>
+												</a>
+											</form>
+										</td>
 									</tr>
 									{% endfor %}
 								</tbody>
 							</table>
-							<table class="table table-hover table-bordered">
-								<thead class="thead-dark">
-									<tr>
-										<th scope="col">NAME</th>
-										<th scope="col">CO2</th>
-										<th scope="col">CO2 Relay</th>
-										<th scope="col">Humidity</th>
-										<th scope="col">Humidity Relay</th>
-										<th scope="col">Temperature</th>
-										<th scope="col">Temperature Relay</th>
-									</tr>
-								</thead>
-								<tbody>
-									{% for room_climate in room.climate %}
-									<tr>
-										<th scope="row">{{ room_climate.name }}</th>
-										<td>{{ room_climate.co2_parameters }}</td>
-										<td>{{ room_climate.co2_relay_ip }}</td>
-										<td>{{ room_climate.humidity_parameters }}</td>
-										<td>{{ room_climate.humidity_relay_ip }}</td>
-										<td>{{ room_climate.temperature_parameters }}</td>
-										<td>{{ room_climate.exhaust_relay_ip }}</td>
-									</tr>
-									{% endfor %}
-								</tbody>
-							</table>
-							<form action="{% url 'delete_room' room.id %}" method="POST">
-								{% csrf_token %}
-								<button type="submit">
-									<i class="fas fa-trash-alt"></i>
-								</button>
-							</form>
-						</div>
+							<table class="table table-bordered table-responsive">
+							<thead>
+								<tr>
+									<th>NAME</th>
+									<th>START TIME</th>
+									<th>END TIME</th>
+									<th>HOW OFTEN</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for room_climate_schedule in room.climate_schedule %}
+								<tr>
+									<th>{{ room_climate_schedule.name }}</th>
+									<td>{{ room_climate_schedule.start_time }}</td>
+									<td>{{ room_climate_schedule.end_time }}</td>
+									<td>{{ room_climate_schedule.how_often }}</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+
+						<table class="table table-bordered table-responsive">
+							<thead>
+								<tr>
+									<th>NAME</th>
+									<th>CO2</th>
+									<th>CO2 Relay</th>
+									<th>Humidity</th>
+									<th>Humidity Relay</th>
+									<th>Temperature</th>
+									<th>Temperature Relay</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for room_climate in room.climate %}
+								<tr>
+									<th>{{ room_climate.name }}</th>
+									<td>{{ room_climate.co2_parameters }}</td>
+									<td>{{ room_climate.co2_relay_ip }}</td>
+									<td>{{ room_climate.humidity_parameters }}</td>
+									<td>{{ room_climate.humidity_relay_ip }}</td>
+									<td>{{ room_climate.temperature_parameters }}</td>
+									<td>{{ room_climate.exhaust_relay_ip }}</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+						<a href="{% url 'get_room' room.id %}" class="btn btn-dark">View Room</a>
+						<form action="{% url 'delete_room' room.id %}" method="POST">
+							{% csrf_token %}
+							<button type="submit">
+								<i class="fas fa-trash-alt"></i>
+							</button>
+						</form>
+					</div>
 				</div>
 				{% empty %}
 					<div class="card">
@@ -147,7 +153,9 @@
 					</div>
 				{% endfor %}
 			</div>
+			</div>
 		</div>
 	</main>
 </div>
+
 {% endblock content %}

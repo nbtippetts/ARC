@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<link href="{% static 'css/schedule.css' %}" rel="stylesheet">
+<link href="{% static 'css/main.css' %}" rel="stylesheet">
 <script src="{% static 'js/climate_data.js' %}"></script>
 <script src="{% static 'js/edit_args.js' %}"></script>
 <div class="grid-container">
@@ -11,9 +11,11 @@
 			<div class="overviewcard">
 				<div class="overviewcard__icon">{{ ip_state.name }}</div>
 				<div class="overviewcard__info">
+					{% if ip_state.name == "Climate" %}
 						<div id="CO2-{{ get_room.id }}"></div>
 						<div id="Humidity-{{ get_room.id }}"></div>
 						<div id="Exhaust-{{ get_room.id }}"></div>
+					{% endif %}
 						<div>{{ ip_state.state }}</div>
 						{% if ip_state.state %}
 						<form action="{% url 'relay_control' get_room.id %}" method="POST">
@@ -40,36 +42,24 @@
 		</div>
 		<div class="main-cards">
 			<div class="card">
-				<h5 class="card-header">Manage Schedules
-					<button class="btn btn-dark" style="float: right;" data-toggle="modal" data-target="#addScheduleModal">Create Schedule</button>
-				</h5>
+				<h5 class="card-header">Manage Schedules</h5>
 				<div class="card-body">
-						<table class="table table-hover table-bordered">
-							<thead class="thead-dark">
+					<div class="row justify-content-center">
+						<div class="col-auto">
+						<table class="table table-bordered table-responsive">
+							<thead>
 								<tr>
-									<th>
-										<span class="custom-checkbox">
-											<input type="checkbox" id="selectAll">
-											<label for="selectAll"></label>
-										</span>
-									</th>
-									<th scope="col">NAME</th>
-									<th scope="col">START TIME</th>
-									<th scope="col">END TIME</th>
-									<th scope="col">HOW OFTEN</th>
-									<th scope="col">State</th>
-									<th scope="col">Actions</th>
+									<th>NAME</th>
+									<th>START TIME</th>
+									<th>END TIME</th>
+									<th>HOW OFTEN</th>
+									<th>State</th>
+									<th>Actions</th>
 								</tr>
 							</thead>
 							<tbody>
 								{% for room_climate_schedule in get_room.climate_schedule %}
 								<tr>
-									<th scope="row">
-										<span class="custom-checkbox">
-											<input type="checkbox" id="checkbox{{ room_climate_schedule.climate_schedule_id }}" name="options[{{ get_room.id }}, {{ room_climate_schedule.climate_schedule_id }}]" value="{{ room_climate_schedule.climate_schedule_id }}">
-											<label for="checkbox{{ room_climate_schedule.climate_schedule_id }}"></label>
-										</span>
-									</th>
 									<td>{{ room_climate_schedule.name }}</td>
 									<td>{{ room_climate_schedule.start_time }}</td>
 									<td>{{ room_climate_schedule.end_time }}</td>
@@ -88,46 +78,40 @@
 											</a>
 										</form>
 									</td>
+									<div class="w-100"></div>
 								</tr>
 								{% endfor %}
 							</tbody>
 						</table>
+						<button class="btn btn-dark" data-toggle="modal" data-target="#addScheduleModal">Create Schedule</button>
+						</div>
+						</div>
 						</div>
 					</div>
 			<div class="card">
-				<h5 class="card-header">Manage Intervals
-					<button class="btn btn-dark" style="float: right;" data-toggle="modal" data-target="#addIntervalModal">Create Schedule Interval</button></h5>
+				<h5 class="card-header">Manage Intervals</h5>
 				<div class="card-body">
-						<table class="table table-hover table-bordered">
-							<thead class="thead-dark">
+				<div class="row justify-content-center">
+						<div class="col-auto">
+						<table class="table table-bordered table-responsive">
+							<thead>
 								<tr>
-									<th>
-										<span class="custom-checkbox">
-											<input type="checkbox" id="selectAll">
-											<label for="selectAll"></label>
-										</span>
-									</th>
-									<th scope="col">NAME</th>
-									<th scope="col">Run Every</th>
-									<th scope="col">For</th>
-									<th scope="col">State</th>
-									<th scope="col">Actions</th>
+									<th>NAME</th>
+									<th>Run Every</th>
+									<th>For</th>
+									<th>State</th>
+									<th>Actions</th>
 								</tr>
 							</thead>
 							<tbody>
 								{% for room_climate_interval in get_room.climate_interval %}
 								<tr>
-									<th scope="row">
-										<span class="custom-checkbox">
-											<input type="checkbox" id="checkbox{{ room_climate_interval.climate_interval_id }}" name="options[{{ get_room.id }}, {{ room_climate_interval.climate_interval_id }}]" value="{{ room_climate_interval.climate_interval_id }}">
-											<label for="checkbox{{ room_climate_interval.climate_interval_id }}"></label>
-										</span>
-									</th>
 									<td>{{ room_climate_interval.name }}</td>
 									<td>{{ room_climate_interval.interval_hour }}:{{ room_climate_interval.interval_minute }}</td>
 									<td>{{ room_climate_interval.duration_hour }}:{{ room_climate_interval.duration_minute }}</td>
 									{% for ip_state in room_climate_interval.IP%}
 									<td>{{ ip_state.state }}</td>
+
 									{% endfor %}
 									<td>
 										<a class="fa fa-edit" data-toggle="modal" data-target="#editIntervalModal" data-whatever="{% url 'patch_interval' get_room.id room_climate_interval.climate_interval_id %}"></a>
@@ -144,41 +128,38 @@
 								{% endfor %}
 							</tbody>
 						</table>
+						<button class="btn btn-dark" data-toggle="modal" data-target="#addIntervalModal">Create Schedule Interval</button>
+						</div>
+						</div>
 						</div>
 					</div>
 					<div class="card">
-						<h5 class="card-header">Manage Climate
-							<button class="btn btn-dark" style="float: right;" data-toggle="modal" data-target="#addClimateModal">Create Climate Parameters</button>
-						</h5>
+						<h5 class="card-header">Manage Climate</h5>
 						<div class="card-body">
-						<table class="table table-hover table-bordered">
-							<thead class="thead-dark">
+						<div class="row justify-content-center">
+						<div class="col-auto">
+						<table class="table table-bordered table-responsive">
+							<thead>
 								<tr>
-									<th scope="col">NAME</th>
-									<th scope="col">CO2</th>
-									<th scope="col">CO2 Buffer</th>
-									<th scope="col">CO2 Automation</th>
-									<th scope="col">Humidity</th>
-									<th scope="col">Humidity Automation</th>
-									<th scope="col">Temperature</th>
-									<th scope="col">Exhaust Automation</th>
-									<th scope="col">Buffer</th>
-									<th scope="col">Start Time</th>
-									<th scope="col">End Time</th>
-									<th scope="col">Actions</th>
+									<th>NAME</th>
+									<th>CO2 Buffer</th>
+									<th>CO2</th>
+									<th>Humidity</th>
+									<th>Temperature</th>
+									<th>Humidity/Temp Buffer</th>
+									<th>Start Time</th>
+									<th>End Time</th>
+									<th>Actions</th>
 								</tr>
 							</thead>
 							<tbody>
 								{% for room_climate in get_room.climate %}
 								<tr>
 									<td>{{ room_climate.name }}</td>
-									<td>{{ room_climate.co2_parameters }}</td>
 									<td>{{ room_climate.co2_buffer_parameters }}</td>
-									<td>{{ room_climate.co2_relay_ip }}</td>
+									<td>{{ room_climate.co2_parameters }}</td>
 									<td>{{ room_climate.humidity_parameters }}</td>
-									<td>{{ room_climate.humidity_relay_ip }}</td>
 									<td>{{ room_climate.temperature_parameters }}</td>
-									<td>{{ room_climate.exhaust_relay_ip }}</td>
 									<td>{{ room_climate.buffer_parameters }}</td>
 									{% for climate_day_night in room_climate.climate_day_night %}
 										<td>{{ climate_day_night.climate_start_time }}</td>
@@ -202,17 +183,22 @@
 								{% endfor %}
 							</tbody>
 						</table>
+						<button class="btn btn-dark" data-toggle="modal" data-target="#addClimateModal">Create Climate Parameters</button>
+						</div>
+						</div>
 					</div>
 				</div>
 					<div class="card">
 						<h5 class="card-header">Lighting LOG</h5>
 						<div class="card-body">
-							<table class="table table-hover table-bordered">
-								<thead class="thead-dark">
+						<div class="row justify-content-center">
+						<div class="col-auto">
+							<table class="table table-bordered table-responsive">
+								<thead>
 									<tr>
-										<th scope="col">NAME</th>
-										<th scope="col">Start Time</th>
-										<th scope="col">End Time</th>
+										<th>NAME</th>
+										<th>Start Time</th>
+										<th>End Time</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -225,17 +211,22 @@
 									{% endfor %}
 								</tbody>
 							</table>
+							</div>
+							</div>
+
 						</div>
 					</div>
 					<div class="card">
 						<h5 class="card-header">Watering LOGS</h5>
 						<div class="card-body">
-							<table class="table table-hover table-bordered">
-								<thead class="thead-dark">
+						<div class="row justify-content-center">
+						<div class="col-auto">
+							<table class="table table-bordered table-responsive">
+								<thead>
 									<tr>
-										<th scope="col">NAME</th>
-										<th scope="col">Start Time</th>
-										<th scope="col">End Time</th>
+										<th>NAME</th>
+										<th>Start Time</th>
+										<th>End Time</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -248,17 +239,22 @@
 									{% endfor %}
 								</tbody>
 							</table>
+							</div>
+							</div>
+
 						</div>
 					</div>
 					<div class="card">
 						<h5 class="card-header">CO2 LOGS</h5>
 						<div class="card-body">
-							<table class="table table-hover table-bordered">
-								<thead class="thead-dark">
+						<div class="row justify-content-center">
+						<div class="col-auto">
+							<table class="table table-bordered table-responsive">
+								<thead>
 									<tr>
-										<th scope="col">NAME</th>
-										<th scope="col">Start Time</th>
-										<th scope="col">End Time</th>
+										<th>NAME</th>
+										<th>Start Time</th>
+										<th>End Time</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -271,17 +267,22 @@
 									{% endfor %}
 								</tbody>
 							</table>
+							</div>
+							</div>
+
 						</div>
 					</div>
 					<div class="card">
 						<h5 class="card-header">Humidity LOG</h5>
 						<div class="card-body">
-							<table class="table table-hover table-bordered">
-								<thead class="thead-dark">
+						<div class="row justify-content-center">
+						<div class="col-auto">
+							<table class="table table-bordered table-responsive">
+								<thead>
 									<tr>
-										<th scope="col">NAME</th>
-										<th scope="col">Start Time</th>
-										<th scope="col">End Time</th>
+										<th>NAME</th>
+										<th>Start Time</th>
+										<th>End Time</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -294,17 +295,22 @@
 									{% endfor %}
 								</tbody>
 							</table>
+							</div>
+							</div>
+
 						</div>
 					</div>
 					<div class="card">
 						<h5 class="card-header">Exhaust LOGS</h5>
 						<div class="card-body">
-							<table class="table table-hover table-bordered">
-								<thead class="thead-dark">
+						<div class="row justify-content-center">
+						<div class="col-auto">
+							<table class="table table-bordered table-responsive">
+								<thead>
 									<tr>
-										<th scope="col">NAME</th>
-										<th scope="col">Start Time</th>
-										<th scope="col">End Time</th>
+										<th>NAME</th>
+										<th>Start Time</th>
+										<th>End Time</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -317,17 +323,22 @@
 									{% endfor %}
 								</tbody>
 							</table>
+							</div>
+							</div>
+
 						</div>
 					</div>
 					<div class="card">
 						<h5 class="card-header">Climate LOGS</h5>
 						<div class="card-body">
-							<table class="table table-hover table-bordered">
-								<thead class="thead-dark">
+							<div class="row justify-content-center">
+								<div class="col-auto">
+							<table class="table table-bordered table-responsive">
+								<thead>
 									<tr>
-										<th scope="col">CO2</th>
-										<th scope="col">Humidity</th>
-										<th scope="col">Temperature</th>
+										<th>CO2</th>
+										<th>Humidity</th>
+										<th>Temperature</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -340,11 +351,14 @@
 									{% endfor %}
 								</tbody>
 							</table>
+							</div>
 						</div>
 					</div>
+				</div>
 		</div>
 	</main>
 </div>
+
 <div class="modal fade" id="addClimateModal" tabindex="-1" aria-labelledby="climateModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -382,12 +396,19 @@
 					<label>Buffer</label>
 					<input type="text" name='buffer_parameters' class="form-control" placeholder="Buffer">
 				</div>
+				{% for check_climate in get_room.climate %}
 				<div class="form-group">
 					<label>Start Time</label>
 					<input type="time"name='climate_start_time' class="form-control" placeholder="Start Time">
 					<label>End Time</label>
 					<input type="time" name='climate_end_time' class="form-control" placeholder="End Time">
 				</div>
+				{% empty %}
+				<div class="form-group">
+					<input type="time" hidden name='climate_start_time' class="form-control" placeholder="Start Time">
+					<input type="time" hidden name='climate_end_time' class="form-control" placeholder="End Time">
+				</div>
+				{% endfor %}
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 					<button type="submit" class="btn btn-primary">Add</button>
